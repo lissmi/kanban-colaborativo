@@ -1,20 +1,34 @@
-// Axios conecta React con Express. El único dato de configuración del frontend
-// continúa siendo REACT_APP_API_URL: los secretos OAuth/Gmail están en backend.
+// React solo almacena un JWT corto en sessionStorage; la cookie HttpOnly queda en Express.
+// Cerrar pestañas no elimina la cookie persistente, por lo que podemos renovar la sesión.
 import axios from 'axios';
-// En local se respeta REACT_APP_API_URL=http://localhost:5000/api.
-// En Vercel, frontend y backend comparten dominio: usamos /api sin otro secreto.
-const defaultApiUrl = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api';
-const API_URL = (process.env.REACT_APP_API_URL || defaultApiUrl).replace(/\/$/, '');
-const http = axios.create({ baseURL: API_URL, timeout: 15000 });
+
+// En producción se usa el mismo dominio (/api); en desarrollo se respeta el .env actual.
+// En Vercel este proyecto sirve React y Express bajo UN mismo dominio.
+// Usar una URL http://... o de otro subdominio puede hacer que el navegador bloquee la cookie.
+const API_URL = process.env.NODE_ENV === 'production'
+  ? '/api'
+  : (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/$/, '');
+const http = axios.create({ baseURL: API_URL, timeout: 15000, withCredentials: true });
 const SESSION_KEY = 'kanban-session-token';
 const SPACE_KEY = 'kanban-selected-space';
-let inMemoryWorkspace = ''; // Fallback cuando localStorage está bloqueado.
+let inMemoryToken = '';
+let inMemoryWorkspace = '';
+let pendingRefresh = null; // Una sola renovación por pestaña para varias solicitudes simultáneas.
 
 export const session = {
-  get: () => window.sessionStorage.getItem(SESSION_KEY),
-  set: token => window.sessionStorage.setItem(SESSION_KEY, token),
-  clear: () => window.sessionStorage.removeItem(SESSION_KEY),
-  // La preferencia de espacio no otorga permisos: Express consulta MongoDB.
+  get: () => {
+    try { return window.sessionStorage.getItem(SESSION_KEY) || inMemoryToken; }
+    catch (_error) { return inMemoryToken; }
+  },
+  set: token => {
+    inMemoryToken = token;
+    try { window.sessionStorage.setItem(SESSION_KEY, token); } catch (_error) {}
+  },
+  clear: () => {
+    inMemoryToken = '';
+    try { window.sessionStorage.removeItem(SESSION_KEY); } catch (_error) {}
+  },
+  // El Kanban elegido no otorga permisos: Express comprueba membresías en MongoDB.
   getWorkspace: () => {
     try { return inMemoryWorkspace || window.localStorage.getItem(SPACE_KEY) || ''; }
     catch (_error) { return inMemoryWorkspace; }
@@ -25,25 +39,64 @@ export const session = {
   },
 };
 
+// Se añade el JWT únicamente a rutas autenticadas.
 http.interceptors.request.use(config => {
-  const token = session.get();
-  if (token && config.authenticated !== false) config.headers.Authorization = `Bearer ${token}`;
+  if (config.authenticated !== false) {
+    const token = session.get();
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    // Nunca enviar un JWT vencido a las rutas públicas de Google/refresh/logout.
+    delete config.headers.Authorization;
+  }
   const workspaceId = session.getWorkspace();
   if (workspaceId) config.headers['X-Workspace-Id'] = workspaceId;
   return config;
 });
 
+// Nunca almacenamos el secreto de la cookie en JavaScript ni en localStorage.
+export function restorePersistentSession() {
+  if (!pendingRefresh) {
+    pendingRefresh = http.post('/auth/refresh', null, { authenticated: false })
+      .then(response => {
+        session.set(response.data.token);
+        return response.data;
+      })
+      .finally(() => { pendingRefresh = null; });
+  }
+  return pendingRefresh;
+}
+
+function toFriendlyError(error) {
+  const friendly = new Error(error.response?.data?.error ||
+    (error.response ? `Error HTTP ${error.response.status}` : 'No se pudo conectar con el backend'));
+  // Permite distinguir «no hay sesión» (401) de errores temporales o un 403 por configuración.
+  friendly.status = error.response?.status || 0;
+  return friendly;
+}
+
 export async function api(path, { method = 'GET', body, authenticated = true } = {}) {
+  const config = { url: path, method, data: body, authenticated };
   try {
-    const response = await http.request({ url: path, method, data: body, authenticated });
+    const response = await http.request(config);
     return response.data ?? null;
   } catch (error) {
-    if (error.response?.status === 401 && authenticated) {
-      session.clear();
-      window.dispatchEvent(new Event('kanban-auth-expired'));
+    // Cuando el JWT de 15 minutos vence, renovarlo mediante la cookie HttpOnly.
+    // Los endpoints públicos de Google, refresh y logout no entran en este bucle.
+    if (authenticated && error.response?.status === 401) {
+      try {
+        await restorePersistentSession();
+        const retried = await http.request(config);
+        return retried.data ?? null;
+      } catch (retryError) {
+        if (retryError.response?.status === 401) {
+          session.clear();
+          window.dispatchEvent(new Event('kanban-auth-expired'));
+        }
+        throw toFriendlyError(retryError);
+      }
     }
-    throw new Error(error.response?.data?.error ||
-      (error.response ? `Error HTTP ${error.response.status}` : 'No se pudo conectar con el backend'));
+    throw toFriendlyError(error);
   }
 }
+
 export default http;

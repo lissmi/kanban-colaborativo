@@ -16,6 +16,7 @@ const cronRoutes = require('./routes/cron.routes');
 const { requireAuth } = require('./middleware/auth');
 const { requireWorkspace } = require('./middleware/workspace');
 const errorHandler = require('./middleware/errorHandler');
+const { isAllowedBrowserOrigin } = require('./services/persistentSession');
 
 const app = express();
 // En Vercel, confiar solamente en el último proxy para identificar la IP del cliente.
@@ -23,15 +24,18 @@ const app = express();
 if (process.env.VERCEL === '1') app.set('trust proxy', 1);
 app.disable('x-powered-by');
 app.use(helmet());
-app.use(cors({
-  origin(origin, callback) {
-    if (!origin || config.corsOrigins.includes(origin)) return callback(null, true);
+// Evaluamos CORS por petición: req contiene el dominio real, incluyendo alias de Vercel.
+app.use(cors((req, callback) => {
+  if (!isAllowedBrowserOrigin(req)) {
     return callback(Object.assign(new Error('Origen no permitido por CORS'), { status: 403 }));
-  },
-  // La cookie HttpOnly persistente debe viajar en solicitudes del frontend.
-  credentials: true,
-  // La cabecera x-workspace-id es usada por Axios y verificada por Express.
-  allowedHeaders: ['Authorization', 'Content-Type', 'X-Workspace-Id'],
+  }
+  // Solo reflejar orígenes explícitamente admitidos, nunca usar un comodín con cookies.
+  return callback(null, {
+    origin: req.get('origin') || false,
+    credentials: true,
+    // La cabecera x-workspace-id sigue verificándose en Express, no en CORS.
+    allowedHeaders: ['Authorization', 'Content-Type', 'X-Workspace-Id'],
+  });
 }));
 app.use(express.json({ limit: '100kb' }));
 app.use('/api', rateLimit({ windowMs: 60000, limit: 120, standardHeaders: 'draft-8', legacyHeaders: false }));

@@ -30,12 +30,38 @@ function readCookieToken(req) {
   return match ? match[1] : '';
 }
 
-function checkTrustedOrigin(req) {
-  // Protege las rutas que consumen cookies contra peticiones cross-site.
-  if (req.get('sec-fetch-site') === 'cross-site') return false;
+// Autoriza el dominio HTTPS real donde Vercel sirve esta petición, incluidas sus URL alternativas.
+// Así el refresh no falla si FRONTEND_URL se configuró con http o con otro alias.
+function isAllowedBrowserOrigin(req) {
   const origin = req.get('origin');
-  if (!origin) return true; // Compatibilidad con clientes que no envían Origin.
-  return new Set([config.frontendUrl, ...config.corsOrigins]).has(origin);
+  if (!origin) return true; // Solicitudes sin cabecera Origin, como curl y navegación interna.
+  try {
+    const parsed = new URL(origin);
+    // En Vercel solo autorizamos orígenes HTTPS.
+    if (process.env.VERCEL && parsed.protocol !== 'https:') return false;
+    // No permitir esquemas ajenos a HTTP(S) o una URL que contenga credenciales.
+    if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password) return false;
+    // El dominio en el que el navegador está realmente navegando es válido para su propia API.
+    // El encabezado Host no se obtiene de X-Forwarded-Host suministrado por terceros.
+    const requestHost = String(req.get('host') || '').toLowerCase();
+    if (requestHost && parsed.host.toLowerCase() === requestHost) {
+      return !process.env.VERCEL || parsed.protocol === 'https:';
+    }
+    // Conservar los orígenes explícitos de desarrollo (por ejemplo localhost:3000 → localhost:5000).
+    const allowed = [config.frontendUrl, ...config.corsOrigins];
+    return allowed.some(value => {
+      try { return new URL(value).origin === parsed.origin; }
+      catch (_error) { return false; }
+    });
+  } catch (_error) {
+    return false;
+  }
+}
+
+function checkTrustedOrigin(req) {
+  // Los endpoints de cookies no deben aceptar llamadas realizadas desde otra web.
+  if (req.get('sec-fetch-site') === 'cross-site') return false;
+  return isAllowedBrowserOrigin(req);
 }
 
 async function createPersistentSession(userId, res) {
@@ -87,6 +113,6 @@ async function refreshPersistentSession(token, res) {
 }
 
 module.exports = {
-  checkTrustedOrigin, readCookieToken,
+  isAllowedBrowserOrigin, checkTrustedOrigin, readCookieToken,
   createPersistentSession, clearPersistentSession, refreshPersistentSession,
 };

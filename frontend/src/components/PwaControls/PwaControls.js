@@ -43,11 +43,24 @@ export default function PwaControls() {
       try {
         const result = await api('/notifications/config');
         const current = await getBrowserSubscription().catch(() => null);
+        let linkedToUser = Boolean(current) && Notification.permission === 'granted';
+        // Al reabrir, reparar el registro MongoDB de un dispositivo ya suscrito.
+        // No se solicita permiso ni se crea una suscripción nueva automáticamente.
+        if (linkedToUser && result.enabled) {
+          try {
+            await api('/notifications/subscription', {
+              method: 'POST', body: { subscription: current.toJSON() },
+            });
+          } catch (error) {
+            linkedToUser = false;
+            if (mounted) setMessage(`No se pudo sincronizar Push: ${error.message}`);
+          }
+        }
         if (mounted) {
           setSettings(result.preferences || DEFAULTS);
           setPublicKey(result.vapidPublicKey || '');
           setConfigured(Boolean(result.enabled));
-          setActive(Boolean(current) && Notification.permission === 'granted');
+          setActive(linkedToUser);
         }
       } catch (error) { if (mounted) setMessage(error.message); }
     }
