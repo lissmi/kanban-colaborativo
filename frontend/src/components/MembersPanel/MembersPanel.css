@@ -20,7 +20,7 @@
 .upcoming-item > div { min-width: 0; } .upcoming-item b, .upcoming-item small { display: block; }
 .upcoming-item b { font-size: 10px; line-height: 1.3; } .upcoming-item small { color: #b2b2c1; font-size: 9px; margin-top: 4px; }
 .panel-motivation { display: grid; gap: 9px; position: relative; overflow: hidden; padding: 20px; border: 1px solid #f2e4fa; background: linear-gradient(130deg,#f7efff,#fff1f6); border-radius: 17px; }
-.panel-motivation svg { color: #ab8ad9; } .panel-motivation strong { font: 900 14px 'Nunito', sans-serif; color: #786493; } .panel-motivation > span:not(.panel-spark) { font-size: 10px; line-height: 1.65; color: #9988ab; }
+.panel-motivation svg { color: #ab8ad9; } .panel-motivation strong { font: 900 14px 'Nunito', sans-serif; color: #786493; } .panel-motivation > span:not(.panel-spark) { font-size: 10px; line-height: 1.65; color: #232225; }
 .panel-spark { position: absolute; bottom: -20px; right: 4px; font-size: 93px; line-height: 1; color: #e3d0f6a8; }
 @media (max-width: 1240px) { .members-panel { min-width: 0; } }
 @media (max-width: 1070px) { .members-panel { display: none; } }

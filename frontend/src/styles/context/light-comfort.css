@@ -1,0 +1,510 @@
+/* ============================================================================
+   KANBAN 🌸 · MODO CLARO AMARILLO SOLIDO V7
+   Amarillo pollito mostaza suave, lavanda y azul definidos: menos blanco y menos pastel.
+   Todos los selectores usan data-theme="light": modo oscuro intacto.
+   Cargar al FINAL de los estilos de frontend/src/index.js.
+   ============================================================================ */
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  /* Variables globales: reemplazan el blanco puro y los pasteles muy deslavados. */
+  --page: #e7d585;             /* Fondo principal: amarillo pollito apagado. */
+  --surface: #d1b77b;          /* Tarjetas: crema cálida sólida. */
+  --surface-raised: #deca8a;   /* Tarjetas de tareas: vainilla. */
+  --surface-soft: #bca972;     /* Controles y elementos secundarios. */
+  --surface-hover: #aa91c7;    /* Resalte lavanda suave. */
+  --text: #222c45;             /* Texto habitual: azul tinta oscuro. */
+  --text-strong: #192541;      /* Encabezados con contraste alto. */
+  --muted: #363e58;            /* Textos secundarios: no demasiado pálidos. */
+  --faint: #45465a;            /* Pistas y etiquetas pequeñas. */
+  --stroke: #867650;           /* Bordes notorios, sin negro puro. */
+  --accent: #6543a2;           /* Violeta sólido para acciones. */
+  --accent-strong: #4b2d86;    /* Hover de acciones principales. */
+  --accent-border: #8061ae;   /* Bordes activos. */
+  --purple: #6543a2;
+  --purple-dark: #4b2d86;
+  --shadow: 0 6px 18px rgba(65, 51, 48, .14);
+  /* Estados de tablero: rosa, azul, mantequilla y verde definidos. */
+  --rose-column: #c588a3;
+  --blue-column: #84a7d0;
+  --amber-column: #d1a75a;
+  --green-column: #86b49b;
+  --hero-gradient: linear-gradient(110deg, #a786c8 0%, #7ca4cb 56%, #bf8fae 100%);
+  --swatch-lilac: #8760c3;
+  --swatch-peach: #ca805c;
+  --swatch-mint: #5e9e80;
+  --swatch-blue: #5a8dc1;
+  --swatch-pink: #be6e9b;
+}
+
+/* 1. Fondo de la app, sin tocar la distribución ni el responsive. */
+:root[data-theme='light'],
+:root[data-theme='light'] body,
+:root[data-theme='light'] #root,
+:root[data-theme='light'] :is(.dashboard-shell, .dashboard-main, .dashboard-content, .kanban-login-shell) {
+  background: var(--page);
+  color: var(--text);
+}
+:root[data-theme='light'] ::selection { background: #b6a6d2; color: #17213a; }
+
+/* 2. Sidebar crema: su fondo se diferencia del amarillo del contenido. */
+:root[data-theme='light'] .sidebar { background: #edde91; border-right: 1px solid #867448; }
+:root[data-theme='light'] :is(.sidebar-workspace, .kb-workspace-panel) {
+  background: ddc37b;
+  border-color: #897851;
+  box-shadow: var(--shadow);
+}
+:root[data-theme='light'] :is(.sidebar-quote, .sidebar-add-project) {
+  background: #efd080;
+  color: #3b3651;
+  border-color: #97825a;
+}
+:root[data-theme='light'] :is(.sidebar-link, .sidebar-project, .sidebar-heading,
+  .sidebar-footer small, .brand-text small, .workspace-copy small,
+  .kb-switch-label, .kb-workspace-role, .kb-sidebar-app-section .sidebar-heading) {
+  color: #32334b;
+}
+:root[data-theme='light'] :is(.sidebar-link:hover, .sidebar-link--selected,
+  .sidebar-project:hover, .sidebar-project--active, .kb-pwa-buttons button:hover) {
+  background: #a893cb;
+  color: #2e205d;
+}
+:root[data-theme='light'] :is(.sidebar-add-project:hover, .kb-new-workspace:hover) {
+  background: #a78dcd;
+  color: #2e205d;
+}
+:root[data-theme='light'] :is(.kb-workspace-select, .kb-new-workspace) {
+  background: #dfc88d;
+  color: #282642;
+  border-color: #9a805b;
+}
+:root[data-theme='light'] .brand-flower { background: #a088c9; color: #4c347f; }
+:root[data-theme='light'] .workspace-icon { background: #bc829e; }
+:root[data-theme='light'] .sidebar-project-icon.tint-lilac { background: #ad8fd0; }
+:root[data-theme='light'] .sidebar-project-icon.tint-peach { background: #cb976f; }
+:root[data-theme='light'] .sidebar-project-icon.tint-mint { background: #8dba9b; }
+:root[data-theme='light'] .sidebar-project-icon.tint-blue { background: #87a8d0; }
+:root[data-theme='light'] .sidebar-project-icon.tint-pink { background: #c98fac; }
+
+/* 3. Cabecera azul niebla: se evita otro bloque blanco. */
+:root[data-theme='light'] .topbar { background: #87a7cd; border-color: #647f9e; }
+:root[data-theme='light'] :is(.theme-toggle, .btn-outline, .search-field,
+  .filter-field, .hero-date, .kb-mobile-spaces select) {
+  background: #bec0bd;
+  color: #222c45;
+  border-color: #878995;
+}
+:root[data-theme='light'] :is(.btn-outline:hover, .theme-toggle:hover, .btn-icon:hover) {
+  background: #a08acb;
+  color: #32265c;
+}
+:root[data-theme='light'] :is(.btn-primary, .kb-mobile-spaces button, .kb-pwa-primary) {
+  background: #6543a2;
+  color: #fff;
+  border-color: #533281;
+  box-shadow: 0 5px 13px rgba(64, 43, 119, .23);
+}
+:root[data-theme='light'] :is(.btn-primary:hover, .kb-pwa-primary:hover) { background: #4b2d86; }
+:root[data-theme='light'] :is(.search-field input, .filter-field select,
+  .kb-mobile-spaces select) { color: #1c2944; }
+:root[data-theme='light'] .search-field input::placeholder { color: #464a60; }
+:root[data-theme='light'] .topbar-team-plus { background: #a48bce; color: #30215e; }
+:root[data-theme='light'] :is(.breadcrumbs, .breadcrumbs-slash,
+  .hero-heading p, .board-toolbar p, .board-hint, .dashboard-footer,
+  .panel-subtitle, .member-item small, .upcoming-item small,
+  .task-description, .task-due, .column-add, .column-empty, .modal-head p) {
+  color: var(--muted);
+}
+:root[data-theme='light'] :is(.breadcrumbs strong, .hero-heading h1,
+  .board-toolbar h2, .kanban-column-header h3, .panel-title h3,
+  .member-item b, .stat-card > div b, .task-card h4, .modal-head h2) {
+  color: var(--text-strong);
+}
+
+/* 4. Resumen: hero lavanda-azul definido y estadísticas sin blanco. */
+:root[data-theme='light'] .hero-card {
+  background: var(--hero-gradient);
+  border-color: #8d85a5;
+  box-shadow: var(--shadow);
+}
+:root[data-theme='light'] :is(.hero-main p, .hero-pill, .hero-go,
+  .hero-progress > span, .hero-progress-ring span) { color: #303058; }
+:root[data-theme='light'] .hero-progress-ring {
+  background: radial-gradient(circle at center, #aa94ce 0 55%, transparent 56%),
+              conic-gradient(#604b9e var(--percent), #8986b9 0);
+}
+:root[data-theme='light'] .hero-progress-ring strong { color: #302060; }
+:root[data-theme='light'] :is(.eyebrow, .board-eyebrow) { color: #39266a; }
+:root[data-theme='light'] .stat-card {
+  background: #d1b779;
+  border-color: #98815e;
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+:root[data-theme='light'] .stats-row > .stat-card:nth-child(1) { background: #ae8bc9; border-color: #81639f; }
+:root[data-theme='light'] .stats-row > .stat-card:nth-child(2) { background: #85a8ce; border-color: #627f9e; }
+:root[data-theme='light'] .stats-row > .stat-card:nth-child(3) { background: #87b69a; border-color: #64866e; }
+:root[data-theme='light'] .stats-row > .stat-card:nth-child(4) { background: #cda657; border-color: #988047; }
+:root[data-theme='light'] .stat-card > div span { color: #32344e; }
+:root[data-theme='light'] .stat-decoration { color: #635477; }
+:root[data-theme='light'] .stat-icon--all { background: #9b79c3; color: #302062; }
+:root[data-theme='light'] .stat-icon--doing { background: #739ed0; color: #173f6d; }
+:root[data-theme='light'] .stat-icon--done { background: #6da982; color: #154d32; }
+:root[data-theme='light'] .stat-icon--pending { background: #bd9340; color: #54340d; }
+
+/* 5. Cuatro columnas de color definido y tareas vainilla tostada. */
+:root[data-theme='light'] .kanban-column { border: 1px solid #8f7b5a; }
+:root[data-theme='light'] .kanban-column--rose { background: #c588a3; border-color: #95637c; }
+:root[data-theme='light'] .kanban-column--blue { background: #84a7d0; border-color: #5b7da0; }
+:root[data-theme='light'] .kanban-column--amber { background: #d1a75a; border-color: #997a41; }
+:root[data-theme='light'] .kanban-column--green { background: #86b49b; border-color: #5d8c72; }
+:root[data-theme='light'] .kanban-column--dragover { background: #9c8ac8; border: 2px dashed var(--accent); }
+:root[data-theme='light'] .column-count { background: #dbbf80; color: #252944; }
+:root[data-theme='light'] .task-card {
+  background: #e0c787;
+  color: #222c45;
+  border: 1px solid #938057;
+  box-shadow: 0 3px 10px rgba(54, 40, 43, .12);
+}
+:root[data-theme='light'] .task-card:hover {
+  border-color: #5b4090;
+  box-shadow: 0 8px 20px rgba(60, 49, 70, .20);
+}
+:root[data-theme='light'] .task-card h4 { color: #1c2944; }
+:root[data-theme='light'] .task-label { background: #ae8bd2; color: #2a1858; }
+:root[data-theme='light'] :is(.task-card-top, .task-checklist-top) { color: #424058; }
+:root[data-theme='light'] .task-card-footer { border-color: #978258; }
+:root[data-theme='light'] .task-meter { background: #b7a16e; }
+:root[data-theme='light'] .task-meter > span { background: #6543a2; }
+:root[data-theme='light'] .priority-high { background: #c77e91; color: #6d152d; }
+:root[data-theme='light'] .priority-medium { background: #caa353; color: #5b370a; }
+:root[data-theme='light'] .priority-low { background: #83b79a; color: #15543a; }
+:root[data-theme='light'] .column-add { color: #36324f; border-color: #8a734d; }
+:root[data-theme='light'] .column-add:hover { background: #aa90d0; border-color: #5d408f; }
+:root[data-theme='light'] .board-scroller { scrollbar-color: #705b89 transparent; }
+
+/* 6. Equipo, formularios, ventana de notificaciones y login. */
+:root[data-theme='light'] :is(.panel-box, .workspace-team-card) {
+  background: #d0b775;
+  color: var(--text);
+  border-color: #907850;
+  box-shadow: var(--shadow);
+}
+:root[data-theme='light'] .panel-title h3 svg { color: #4f2e91; }
+:root[data-theme='light'] .panel-add {
+  background: #a48aca;
+  border-color: #74569c;
+  color: #2e1e63;
+}
+:root[data-theme='light'] .upcoming-item { border-color: #947c58; }
+:root[data-theme='light'] .panel-motivation {
+  background: linear-gradient(120deg, #9b80c2, #b99d7b);
+  border-color: #78628c;
+}
+:root[data-theme='light'] .panel-motivation strong { color: #2e205a; }
+:root[data-theme='light'] .modal-overlay { background: rgba(30, 32, 47, .55); }
+:root[data-theme='light'] .modal-window {
+  background: #cbb272;
+  color: #242b43;
+  border: 1px solid #8c7952;
+}
+:root[data-theme='light'] :is(.modal-head, .modal-buttons, .subtasks-editor,
+  .team-modal-member) { border-color: #93805b; }
+:root[data-theme='light'] :is(.form-field, .subtask-row label,
+  .project-member-choices label) { color: #252c46; }
+:root[data-theme='light'] :is(.form-field input, .form-field textarea,
+  .form-field select, .subtask-add, .project-icon-choices button, .kb-pwa-field select) {
+  background: #ddc588;
+  color: #222b45;
+  border-color: #8a7954;
+}
+:root[data-theme='light'] :is(.form-field input::placeholder,
+  .form-field textarea::placeholder) { color: #49475c; }
+:root[data-theme='light'] :is(.form-field input:focus, .form-field textarea:focus,
+  .form-field select:focus) {
+  border-color: #6241a0;
+  box-shadow: 0 0 0 3px rgba(96, 73, 155, .20);
+}
+:root[data-theme='light'] :is(.subtasks-editor, .team-modal-member) { background: #bda872; }
+:root[data-theme='light'] .subtask-done { color: #454256; }
+:root[data-theme='light'] .btn-delete { background: #c78e95; color: #661f32; }
+:root[data-theme='light'] .project-icon-choices button.selected {
+  background: #a689cf;
+  border-color: #583990;
+}
+:root[data-theme='light'] .kb-pwa-panel {
+  background: #c9b273;
+  border-color: #8d7a52;
+  color: #202a46;
+}
+:root[data-theme='light'] .kb-pwa-panel p,
+:root[data-theme='light'] .kb-pwa-footnote { color: #37354f; }
+:root[data-theme='light'] .kb-pwa-secondary { background: #a792c8; color: #352763; }
+:root[data-theme='light'] .kb-pwa-buttons button { color: #323049; }
+:root[data-theme='light'] .kanban-login-card {
+  background: #d3ba7b;
+  border: 1px solid #957d56;
+  box-shadow: 0 15px 40px rgba(52, 44, 63, .17);
+}
+:root[data-theme='light'] :is(.kanban-login-card p, .kanban-login-eyebrow,
+  .kanban-login-footer, .kanban-login-info) { color: #39394e; }
+:root[data-theme='light'] .kanban-login-features span {
+  background: #aa90cb;
+  border: 1px solid #816a9d;
+  color: #2a2053;
+}
+:root[data-theme='light'] .kanban-login-card .kanban-login-error { color: #6e1f37; }
+
+/* Un foco siempre visible para teclado, sin alterar el diseño responsive. */
+:root[data-theme='light'] :focus-visible {
+  outline: 2px solid #4b2d86;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme='light'] .task-card { transition: none; }
+}
+
+
+/* 7. Controles secundarios: no dejar islas blancas en las pantallas internas. */
+:root[data-theme='light'] :is(.toast-message, .profile-preview, .profile-privacy-note,
+  .profile-option-group, .kb-space-form-help, .empty-state) {
+  background: #d1bb7d;
+  border-color: #8c7952;
+  color: #273048;
+}
+:root[data-theme='light'] :is(.team-modal-member small, .workspace-team-card small,
+  .sidebar-count, .sidebar-mini-add, .profile-preview span, .profile-option-group legend,
+  .kb-space-form-help) { color: #353d57; }
+:root[data-theme='light'] :is(.project-member-choices label, .profile-icon, .subtask-add input,
+  .filter-field select, .kb-workspace-select, .search-field input) {
+  color: #202b45;
+}
+:root[data-theme='light'] :is(.profile-icon, .profile-color, .project-color-swatch,
+  .subtask-row, .kb-pwa-field select) { border-color: #907b58; }
+:root[data-theme='light'] :is(.profile-icon, .subtask-row) { background: #dbc083; }
+:root[data-theme='light'] :is(.profile-icon.is-selected, .profile-color.is-selected) {
+  border-color: #6543a2;
+  box-shadow: 0 0 0 2px rgba(101,67,162,.20);
+}
+:root[data-theme='light'] .topbar-team-plus { border-color: #87a7cd; }
+
+/* =========================
+   MODO CLARO - AJUSTE FINO V8
+   ========================= */
+
+[data-theme="light"] {
+  --light-bg: #ccb85a;
+  --light-sidebar: #d9c67a;
+  --light-surface: #d9c072;
+  --light-surface-2: #e3cd8c;
+  --light-surface-3: #ead8a1;
+
+  --light-text: #23314b;
+  --light-text-soft: #4f5875;
+  --light-text-muted: #746a83;
+
+  --light-border: #8d7b49;
+
+  --light-primary: #6a4ab0;
+  --light-primary-hover: #5b3f9a;
+  --light-accent-blue: #9eb9dc;
+  --light-accent-lavender: #b89cd9;
+}
+
+/* fondo general */
+[data-theme="light"] body,
+[data-theme="light"] .app-shell,
+[data-theme="light"] .dashboard-layout,
+[data-theme="light"] .workspace-layout,
+[data-theme="light"] .board-layout {
+  background: var(--light-bg);
+  color: var(--light-text);
+}
+
+/* sidebar un poco más claro */
+[data-theme="light"] .sidebar,
+[data-theme="light"] .dashboard-sidebar,
+[data-theme="light"] .workspace-sidebar {
+  background: var(--light-sidebar);
+  color: var(--light-text);
+  border-right: 1px solid rgba(35, 49, 75, 0.12);
+}
+
+/* paneles y tarjetas */
+[data-theme="light"] .card,
+[data-theme="light"] .panel,
+[data-theme="light"] .dashboard-card,
+[data-theme="light"] .summary-card,
+[data-theme="light"] .stats-card,
+[data-theme="light"] .widget-card,
+[data-theme="light"] .task-card,
+[data-theme="light"] .project-card,
+[data-theme="light"] .modal-content,
+[data-theme="light"] .dialog-content {
+  background: var(--light-surface);
+  color: var(--light-text);
+  border: 1px solid rgba(35, 49, 75, 0.14);
+}
+
+/* superficies internas */
+[data-theme="light"] .task-card,
+[data-theme="light"] .board-column,
+[data-theme="light"] .form-card,
+[data-theme="light"] .subtask-box {
+  background: var(--light-surface-2);
+}
+
+/* columnas kanban un poco más definidas */
+[data-theme="light"] .board-column.todo {
+  background: #e5c4d0;
+}
+[data-theme="light"] .board-column.progress {
+  background: #bdd1ea;
+}
+[data-theme="light"] .board-column.review {
+  background: #dfd08e;
+}
+[data-theme="light"] .board-column.done {
+  background: #c4dfbf;
+}
+
+/* textos */
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4,
+[data-theme="light"] h5,
+[data-theme="light"] h6,
+[data-theme="light"] .title,
+[data-theme="light"] .card-title {
+  color: var(--light-text);
+}
+
+[data-theme="light"] p,
+[data-theme="light"] span,
+[data-theme="light"] small,
+[data-theme="light"] .subtitle,
+[data-theme="light"] .card-subtitle,
+[data-theme="light"] .muted,
+[data-theme="light"] .helper-text {
+  color: var(--light-text-soft);
+}
+
+/* textos que estaban demasiado claros */
+[data-theme="light"] .hero-card p,
+[data-theme="light"] .empty-card p,
+[data-theme="light"] .stat-card p,
+[data-theme="light"] .project-hero p,
+[data-theme="light"] .welcome-card p,
+[data-theme="light"] .task-description,
+[data-theme="light"] .task-meta,
+[data-theme="light"] .column-subtitle {
+  color: var(--light-text-soft) !important;
+}
+
+/* inputs */
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] select {
+  background: #ecd79a;
+  color: var(--light-text);
+  border: 1px solid var(--light-border);
+  box-shadow: none;
+}
+
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: var(--light-text-muted);
+  opacity: 1;
+}
+
+/* labels */
+[data-theme="light"] label,
+[data-theme="light"] .field-label,
+[data-theme="light"] .input-label {
+  color: var(--light-text);
+}
+
+/* focus */
+[data-theme="light"] input:focus,
+[data-theme="light"] textarea:focus,
+[data-theme="light"] select:focus {
+  outline: none;
+  border-color: var(--light-primary);
+  box-shadow: 0 0 0 2px rgba(106, 74, 176, 0.18);
+}
+
+/* botones */
+[data-theme="light"] .btn-primary,
+[data-theme="light"] .primary-button,
+[data-theme="light"] button.btn-primary {
+  background: var(--light-primary);
+  color: #ffffff;
+  border: 1px solid var(--light-primary);
+}
+
+[data-theme="light"] .btn-primary:hover,
+[data-theme="light"] .primary-button:hover,
+[data-theme="light"] button.btn-primary:hover {
+  background: var(--light-primary-hover);
+}
+
+[data-theme="light"] .btn-secondary,
+[data-theme="light"] .secondary-button {
+  background: #d8e1ef;
+  color: var(--light-text);
+  border: 1px solid rgba(35, 49, 75, 0.15);
+}
+
+/* select del filtro */
+[data-theme="light"] .board-toolbar select,
+[data-theme="light"] .filter-select,
+[data-theme="light"] .task-filter select,
+[data-theme="light"] .toolbar select {
+  background: #e4d39b;
+  color: var(--light-text);
+  border: 1px solid var(--light-border);
+  font-weight: 600;
+}
+
+
+
+/* links */
+[data-theme="light"] a {
+  color: #4d4bb2;
+}
+
+[data-theme="light"] a:hover {
+  color: #3f3d97;
+}
+
+/* bordes suaves */
+[data-theme="light"] .card,
+[data-theme="light"] .panel,
+[data-theme="light"] .task-card,
+[data-theme="light"] .modal-content,
+[data-theme="light"] .sidebar,
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] select {
+  border-radius: 16px;
+}
+
+/* modal nueva tarea: mejorar lectura */
+[data-theme="light"] .modal-content,
+[data-theme="light"] .task-modal,
+[data-theme="light"] .new-task-modal {
+  background: #ceb56a;
+  color: var(--light-text);
+}
+
+[data-theme="light"] .modal-content hr,
+[data-theme="light"] .task-modal hr {
+  border-color: rgba(35, 49, 75, 0.18);
+}
+
+/* iconos tenues */
+[data-theme="light"] .icon-muted,
+[data-theme="light"] .soft-icon {
+  color: var(--light-text-muted);
+}
