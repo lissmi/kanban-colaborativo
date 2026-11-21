@@ -2,6 +2,8 @@
 const router = require('express').Router();
 const { randomUUID } = require('node:crypto');
 const jwt = require('jsonwebtoken');
+const PersistentSession = require('../models/PersistentSession');
+const { checkTrustedOrigin, readCookieToken, createPersistentSession, clearPersistentSession, refreshPersistentSession } = require('../services/persistentSession');
 const { OAuth2Client } = require('google-auth-library');
 const Member = require('../models/Member');
 const WorkspaceMember = require('../models/WorkspaceMember');
@@ -82,10 +84,35 @@ router.post('/google', async (req, res) => {
   }
   await ensurePersonalWorkspace(member);
   await activateInvitations(member);
+  // Renueva la identidad al iniciar sesión y revoca la cookie anterior en este dispositivo.
+  await clearPersistentSession(req, res);
+  await createPersistentSession(member.id, res);
+  // JWT de corta duración en sessionStorage; la cookie HttpOnly restaura sesiones futuras.
   const token = jwt.sign({ sub: member.id }, config.jwtSecret, {
-    algorithm: 'HS256', expiresIn: '8h',
+    algorithm: 'HS256', expiresIn: '15m',
   });
-  res.json({ token, user: publicUser(member) });
+  res.set('Cache-Control', 'no-store').json({ token, user: publicUser(member) });
+});
+
+// Se ejecuta al abrir de nuevo la PWA, incluso si sessionStorage ya desapareció.
+// No devuelve el secreto de cookie: únicamente un JWT nuevo y la identidad verificada.
+router.post('/refresh', async (req, res) => {
+  if (!checkTrustedOrigin(req)) return res.status(403).json({ error: 'Origen no autorizado' });
+  if (config.jwtSecret.length < 32) return res.status(503).json({ error: 'Sesión no configurada' });
+  const tokenValue = readCookieToken(req);
+  const member = await refreshPersistentSession(tokenValue, res);
+  if (!member) return res.status(401).json({ error: 'Inicia sesión nuevamente con Google' });
+  const token = jwt.sign({ sub: member.id }, config.jwtSecret, {
+    algorithm: 'HS256', expiresIn: '15m',
+  });
+  return res.set('Cache-Control', 'no-store').json({ token, user: publicUser(member) });
+});
+
+// Solo pulsar «Salir» elimina la sesión persistente; cerrar una pestaña no lo hace.
+router.post('/logout', async (req, res) => {
+  if (!checkTrustedOrigin(req)) return res.status(403).json({ error: 'Origen no autorizado' });
+  await clearPersistentSession(req, res);
+  return res.set('Cache-Control', 'no-store').status(204).end();
 });
 
 router.get('/me', requireAuth, (req, res) => res.json({ user: publicUser(req.user) }));

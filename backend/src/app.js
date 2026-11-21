@@ -28,6 +28,8 @@ app.use(cors({
     if (!origin || config.corsOrigins.includes(origin)) return callback(null, true);
     return callback(Object.assign(new Error('Origen no permitido por CORS'), { status: 403 }));
   },
+  // La cookie HttpOnly persistente debe viajar en solicitudes del frontend.
+  credentials: true,
   // La cabecera x-workspace-id es usada por Axios y verificada por Express.
   allowedHeaders: ['Authorization', 'Content-Type', 'X-Workspace-Id'],
 }));
