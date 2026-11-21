@@ -1,0 +1,62 @@
+/* 🌙 Ajuste visual puntual del filtro «Todos» (modo oscuro).
+   Se aplica únicamente al selector del tablero: no modifica formularios ni modo claro. */
+
+/* La tarjeta contenedora mantiene el aspecto oscuro del resto de botones. */
+:root[data-theme="dark"] .board-controls .filter-field {
+  position: relative; /* Referencia para colocar la flecha personalizada. */
+  display: inline-flex; /* Alinea el icono con el selector. */
+  align-items: center; /* Centra verticalmente ambos elementos. */
+  gap: 7px; /* Separa ligeramente el icono del texto. */
+  min-height: 40px; /* Igual altura aproximada que el botón «Añadir tarea». */
+  padding: 4px 8px 4px 11px; /* Respira sin agrandar demasiado la barra. */
+  border: 1px solid #414860; /* Borde visible, sin excesivo contraste. */
+  border-radius: 13px; /* Redondea también el contenedor exterior. */
+  background: #1c2233; /* Usa el azul pizarra del tema oscuro. */
+  color: #b8a6ed; /* Icono lavanda legible. */
+}
+
+/* Convertimos el desplegable interior en una pequeña píldora. */
+:root[data-theme="dark"] .board-controls .filter-field select {
+  appearance: none; /* Elimina el marco y la flecha nativos rectangulares. */
+  -webkit-appearance: none; /* Compatibilidad con navegadores WebKit. */
+  box-sizing: border-box; /* Incluye el borde en las medidas del control. */
+  min-width: 82px; /* Evita que «Todos» quede apretado. */
+  max-width: min(160px, 40vw); /* Evita desbordarse en teléfonos. */
+  min-height: 29px; /* Hace cómodo el control para ratón y toque. */
+  padding: 5px 24px 5px 11px; /* Reserva espacio para la flecha de la derecha. */
+  border: 1px solid #525b78; /* Define la forma redondeada. */
+  border-radius: 999px; /* Produce el acabado tipo píldora. */
+  background: #30374d; /* Contraste suave frente al contenedor exterior. */
+  color: #f1edff; /* Texto claro y legible. */
+  font: inherit; /* Conserva la tipografía del proyecto. */
+  font-size: 12px; /* Tamaño legible, superior al selector anterior. */
+  font-weight: 600; /* Mejora la lectura sin recargar el botón. */
+  line-height: 1.35; /* Mantiene el texto centrado. */
+  cursor: pointer; /* Indica que el filtro se puede abrir. */
+}
+
+/* Dibujamos una flecha mínima en lugar del triángulo cuadrado del sistema. */
+:root[data-theme="dark"] .board-controls .filter-field::after {
+  content: ""; /* Crea la flecha sin modificar el componente React. */
+  position: absolute; /* Alinea la flecha dentro del contenedor. */
+  top: 50%; /* Sitúa la flecha en el centro vertical. */
+  right: 19px; /* La ubica dentro del espacio reservado del select. */
+  width: 6px; /* Tamaño horizontal de la flecha. */
+  height: 6px; /* Tamaño vertical de la flecha. */
+  border-right: 1.5px solid #d7c9ff; /* Trazo derecho lavanda. */
+  border-bottom: 1.5px solid #d7c9ff; /* Trazo inferior lavanda. */
+  transform: translateY(-70%) rotate(45deg); /* Forma de V descendente. */
+  pointer-events: none; /* La flecha no bloquea los clics ni los toques. */
+}
+
+/* Resalta el selector cuando se navega con Tab, sin eliminar accesibilidad. */
+:root[data-theme="dark"] .board-controls .filter-field select:focus-visible {
+  outline: 2px solid #bda9ff; /* Indicador visible para teclado. */
+  outline-offset: 2px; /* Separa el foco del borde del selector. */
+}
+
+/* Mantiene legibles las opciones al desplegarse en navegadores compatibles. */
+:root[data-theme="dark"] .board-controls .filter-field select option {
+  background: #22283c; /* Fondo oscuro del menú de opciones. */
+  color: #f1edff; /* Texto de alto contraste en el listado. */
+}

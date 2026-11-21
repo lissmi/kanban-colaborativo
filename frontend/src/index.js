@@ -17,6 +17,9 @@ import './styles/context/light-comfort.css';
 // Barras de desplazamiento con tonos lavanda, azul y trigo en el modo claro.
 import './styles/context/scrollbars.css';
 
+// Solo el filtro «Todos» en modo oscuro: forma redondeada y mejor contraste.
+import './styles/context/dark-filter-rounded.css';
+
 // Monta el componente principal de React dentro del elemento #root de public/index.html.
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<React.StrictMode><App /></React.StrictMode>);
