@@ -8,6 +8,9 @@ import './styles/context/theme.css';
 // Importamos las correcciones de colores y navegación.
 import './styles/context/kanban-fixes.css';
 
+// Mantiene la vista del teléfono dentro de su pantalla y organiza sus controles.
+import './styles/context/mobile-responsive.css';
+
 // Monta el componente principal de React dentro del elemento #root de public/index.html.
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<React.StrictMode><App /></React.StrictMode>);

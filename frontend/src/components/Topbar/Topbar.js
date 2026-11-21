@@ -23,9 +23,9 @@ export default function Topbar({ search, setSearch, onNewTask, onOpenMembers, on
         </select>
         <button type="button" onClick={onNewWorkspace} aria-label="Crear nuevo Kanban" title="Crear nuevo Kanban">+</button>
       </div>
-      <div className="topbar-actions">
+      <div className={`topbar-actions ${selectedProject ? '' : 'topbar-actions--no-project'}`}>
         <ThemeToggle />
-        <button className="btn btn-outline" type="button" onClick={onOpenProfile} title="Editar mi perfil">
+        <button className="btn btn-outline kb-topbar-profile" type="button" onClick={onOpenProfile} title="Editar mi perfil">
           <UserRound size={16} /> <span>Mi perfil</span>
         </button>
         {selectedProject && <label className="search-field"><Search size={17} /><input aria-label="Buscar tareas" type="search" placeholder="Buscar una tarea..." value={search} onChange={event => setSearch(event.target.value)} /><kbd>⌕</kbd></label>}
@@ -34,7 +34,7 @@ export default function Topbar({ search, setSearch, onNewTask, onOpenMembers, on
           <span className="topbar-team-plus">+</span>
         </button>}
         {selectedProject && <button className="btn btn-primary topbar-create" onClick={onNewTask}><Plus size={17} /> Nueva tarea</button>}
-        <button className="btn btn-outline" type="button" title={`Cerrar sesión de ${user?.email}`} onClick={logout}><LogOut size={16} /><span>Salir</span></button>
+        <button className="btn btn-outline kb-topbar-logout" type="button" title={`Cerrar sesión de ${user?.email}`} onClick={logout}><LogOut size={16} /><span>Salir</span></button>
       </div>
       <div className="mobile-topbar-brand">
         <button type="button" className="kb-sidebar-open-button" onClick={onOpenMobileMenu}
