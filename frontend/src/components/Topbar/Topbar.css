@@ -1,0 +1,16 @@
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 33px 15px; }
+.breadcrumbs { display: flex; align-items: center; gap: 10px; color: #a2a6b6; font-size: 11px; min-width: 0; }
+.breadcrumbs strong { color: #636b84; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+.breadcrumbs-slash { color: #d4d5e0; font-size: 17px; }
+.topbar-actions { display: flex; align-items: center; gap: 16px; }
+.search-field { display: flex; align-items: center; gap: 9px; color: #a3a7b8; background: #fff; border: 1px solid #eceef6; border-radius: 12px; height: 41px; padding: 0 11px; width: 215px; }
+.search-field input { min-width: 0; width: 100%; border: 0; outline: 0; font-size: 11px; color: #555e77; background: transparent; }
+.search-field input::placeholder { color: #b4b8c8; }
+.search-field kbd { font-size: 15px; color: #d0d2de; }
+.topbar-team { display: flex; padding: 0; background: transparent; border: 0; align-items: center; }
+.topbar-team .avatar + .avatar { margin-left: -7px; }
+.topbar-team-plus { display: grid; place-items: center; height: 27px; width: 27px; border-radius: 50%; background: #f6f2fe; color: #a18cce; border: 2px solid white; font-size: 14px; font-weight: 700; margin-left: -5px; }
+.topbar-create { height: 40px; min-height: 40px; }
+.mobile-topbar-brand { display: none; }
+@media (max-width: 1180px) { .topbar { padding-inline: 24px; } .topbar-actions { gap: 8px; } .search-field { width: 180px; } }
+@media (max-width: 760px) { .topbar { flex-wrap: wrap; padding: 16px 17px; } .breadcrumbs { order: 2; flex: 1; } .topbar-actions { order: 3; flex: 1 0 100%; justify-content: space-between; } .mobile-topbar-brand { display: flex; align-items: center; gap: 6px; order: 1; width: 100%; font: 900 19px 'Nunito', sans-serif; color: #8f77ce; } .topbar-team { display: none; } .search-field { flex: 1; } }

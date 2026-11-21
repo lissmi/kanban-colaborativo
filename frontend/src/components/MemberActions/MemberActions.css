@@ -1,0 +1,38 @@
+/* Acciones discretas que siguen siendo visibles en tema oscuro o claro. */
+.workspace-team-card > .member-actions {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  margin-left: 4px;
+}
+.member-action {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 34px;
+  border-radius: 9px;
+  padding: 6px 9px;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 650;
+  cursor: pointer;
+  transition: transform .12s ease, background .12s ease;
+}
+.member-action:hover:not(:disabled) { transform: translateY(-1px); }
+.member-action:focus-visible { outline: 2px solid #a58be8; outline-offset: 2px; }
+.member-action:disabled { opacity: .55; cursor: wait; }
+.member-action--resend { color: #d8caff; border: 1px solid #7562bb; background: #332a4c; }
+.member-action--resend:hover:not(:disabled) { background: #45345f; }
+.member-action--remove { color: #ffc2d0; border: 1px solid #8d5267; background: #3c2834; }
+.member-action--remove:hover:not(:disabled) { background: #4c2c3b; }
+:root[data-theme="light"] .member-action--resend { color: #60459a; border-color: #bca4e6; background: #f4edff; }
+:root[data-theme="light"] .member-action--remove { color: #a33d58; border-color: #efb7c7; background: #fff1f4; }
+@media (max-width: 850px) {
+  .workspace-team-card { flex-wrap: wrap; }
+  .workspace-team-card > .member-actions { width: 100%; margin-left: 0; justify-content: flex-start; }
+}

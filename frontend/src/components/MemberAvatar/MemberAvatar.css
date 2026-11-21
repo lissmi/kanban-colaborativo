@@ -1,0 +1,3 @@
+/* El emoji elegido utiliza el mismo color de fondo del avatar de cada miembro. */
+.avatar--emoji { font-family: system-ui, 'Segoe UI Emoji', sans-serif; font-size: 18px; line-height: 1; }
+.avatar--small.avatar--emoji { font-size: 14px; }

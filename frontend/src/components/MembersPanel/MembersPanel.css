@@ -1,0 +1,26 @@
+.members-panel { display: flex; flex-direction: column; gap: 15px; min-width: 227px; }
+.panel-box { border: 1px solid #eeedf6; background: white; border-radius: 17px; padding: 17px 16px; box-shadow: var(--shadow); }
+.panel-title { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.panel-title h3 { font: 900 13px 'Nunito', sans-serif; display: flex; gap: 8px; align-items: center; margin: 0; }
+.panel-title h3 svg { color: #ae93d8; }
+.panel-subtitle { font-size: 10px; color: #a7a9ba; line-height: 1.6; margin: 6px 0 17px; }
+.member-list { display: grid; gap: 16px; }
+.member-item { display: flex; gap: 9px; align-items: center; }
+.member-item > div { min-width: 0; flex: 1; }
+.member-item b, .member-item small { display: block; }
+.member-item b { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.member-item small { font-size: 9px; color: #adb0c1; margin-top: 4px; }
+.member-online { width: 6px; height: 6px; border-radius: 50%; background: #8bcdab; }
+.panel-add { margin-top: 19px; width: 100%; min-height: 36px; border: 1px dashed #e2d8f3; border-radius: 10px; background: #faf8ff; color: #967ac9; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 10px; font-weight: 800; }
+.panel-add:hover { background: #f1ebff; }
+.upcoming-item { display: flex; gap: 9px; padding: 13px 0; border-bottom: 1px solid #f4f3f8; }
+.upcoming-item:last-child { border-bottom: 0; padding-bottom: 0; }
+.upcoming-dot { width: 7px; height: 7px; margin-top: 4px; flex-shrink: 0; border-radius: 50%; background: #c1a9ed; }
+.upcoming-item:nth-child(3) .upcoming-dot { background: #ecc493; } .upcoming-item:nth-child(4) .upcoming-dot { background: #88c9af; }
+.upcoming-item > div { min-width: 0; } .upcoming-item b, .upcoming-item small { display: block; }
+.upcoming-item b { font-size: 10px; line-height: 1.3; } .upcoming-item small { color: #b2b2c1; font-size: 9px; margin-top: 4px; }
+.panel-motivation { display: grid; gap: 9px; position: relative; overflow: hidden; padding: 20px; border: 1px solid #f2e4fa; background: linear-gradient(130deg,#f7efff,#fff1f6); border-radius: 17px; }
+.panel-motivation svg { color: #ab8ad9; } .panel-motivation strong { font: 900 14px 'Nunito', sans-serif; color: #786493; } .panel-motivation > span:not(.panel-spark) { font-size: 10px; line-height: 1.65; color: #9988ab; }
+.panel-spark { position: absolute; bottom: -20px; right: 4px; font-size: 93px; line-height: 1; color: #e3d0f6a8; }
+@media (max-width: 1240px) { .members-panel { min-width: 0; } }
+@media (max-width: 1070px) { .members-panel { display: none; } }

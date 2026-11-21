@@ -1,0 +1,33 @@
+.hero-wrap { padding: 10px 0 0; }
+.hero-heading { display: flex; align-items: end; justify-content: space-between; gap: 15px; padding-bottom: 23px; }
+.eyebrow { display: inline-flex; gap: 6px; align-items: center; font-size: 9px; font-weight: 900; letter-spacing: 1.8px; color: #ac91d2; }
+.hero-heading h1 { margin: 9px 0 5px; font: 900 clamp(26px, 2.6vw, 34px)/1.18 'Nunito', sans-serif; letter-spacing: -.9px; color: #333953; }
+.hero-heading h1 span { color: #deadc9; }
+.hero-heading p { margin: 0; font-size: 12px; color: #a3a6b5; }
+.hero-date { border: 1px solid #ece9f6; border-radius: 20px; padding: 9px 13px; font-size: 10px; background: white; color: #9486ad; font-weight: 700; }
+.hero-card { min-height: 190px; background: linear-gradient(105deg, #e9e0ff 0%, #f3e5fd 58%, #fbeaf5 100%); border: 1px solid #e7dafa; border-radius: 22px; padding: 25px 35px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.hero-art { position: absolute; pointer-events: none; border: 2px solid #ffffff65; border-radius: 45%; transform: rotate(25deg); }
+.hero-art--one { width: 245px; height: 220px; right: 15%; top: -123px; }
+.hero-art--two { width: 340px; height: 290px; right: -185px; bottom: -184px; }
+.hero-main { z-index: 1; min-width: 0; }
+.hero-pill { font-size: 9px; font-weight: 900; color: #9975be; letter-spacing: 1.2px; }
+.hero-main h2 { font: 900 clamp(20px, 2.2vw, 27px)/1.17 'Nunito', sans-serif; letter-spacing: -.6px; margin: 10px 0 7px; }
+.hero-main p { font-size: 11px; line-height: 1.5; color: #877c9a; margin: 0; max-width: 380px; }
+.hero-go { display: inline-flex; align-items: center; gap: 7px; padding: 8px 0 0; font-size: 11px; color: #8664b9; font-weight: 900; }
+.hero-go:hover { gap: 11px; }
+.hero-progress { z-index: 1; display: grid; justify-items: center; gap: 9px; margin-right: 32px; min-width: 150px; }
+.hero-progress-ring { width: 128px; height: 128px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #efe7ff 0 55%, transparent 56%), conic-gradient(#9b85dc var(--percent), #ffffffa8 0); border-radius: 50%; box-shadow: 0 5px 25px #7760ac15; }
+.hero-progress-ring strong { font: 900 29px 'Nunito', sans-serif; color: #795cba; }
+.hero-progress-ring span { font-size: 9px; color: #967ebf; }
+.hero-progress > span { font-size: 10px; font-weight: 800; color: #8e79b6; }
+.stats-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; margin-top: 17px; }
+.stat-card { background: white; border: 1px solid #f0eff8; border-radius: 16px; min-height: 95px; display: flex; align-items: center; gap: 12px; padding: 17px; position: relative; overflow: hidden; }
+.stat-icon { display: grid; place-items: center; flex-shrink: 0; width: 43px; height: 43px; border-radius: 13px; }
+.stat-icon--all { background: #f1eaff; color: #9b83d8; } .stat-icon--doing { background: #e9f1ff; color: #7b9ed4; } .stat-icon--done { background: #e1f8ee; color: #65b996; } .stat-icon--pending { background: #fff0e0; color: #d8ab6e; }
+.stat-card > div { display: grid; gap: 3px; z-index: 1; }
+.stat-card > div span { font-size: 10px; color: #9da3b6; white-space: nowrap; }
+.stat-card > div b { font: 900 25px 'Nunito', sans-serif; }
+.stat-decoration { position: absolute; right: 10px; top: 12px; color: #eee8fa; font-size: 23px; }
+@media (max-width: 1230px) { .stat-card { gap: 7px; padding: 13px; } .stat-icon { width: 37px; height: 37px; } }
+@media (max-width: 1030px) { .stats-row { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 700px) { .hero-date, .hero-progress { display: none; } .hero-card { padding: 23px; min-height: 160px; } .stats-row { gap: 9px; } }

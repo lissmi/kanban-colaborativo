@@ -1,0 +1,6 @@
+.team-modal-list { display: grid; gap: 10px; padding-bottom: 8px; }
+.team-modal-member { display: flex; align-items: center; gap: 11px; border: 1px solid #f0edf6; border-radius: 12px; padding: 10px; }
+.team-modal-member > div { flex: 1; min-width: 0; }
+.team-modal-member strong, .team-modal-member small { display: block; }
+.team-modal-member strong { font-size: 12px; } .team-modal-member small { color: #aaa9ba; font-size: 10px; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; }
+.team-modal-member > span:last-child { color: #a38dc8; font-size: 10px; white-space: nowrap; }

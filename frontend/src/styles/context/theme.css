@@ -1,0 +1,278 @@
+/* ========================================================================
+   TEMA GLOBAL DEL KANBAN
+   Edita aquí los colores; no es necesario tocar el CSS de cada componente.
+   El tema oscuro es el predeterminado. data-theme="light" activa el modo claro.
+   ======================================================================== */
+:root {
+  color-scheme: dark;
+  --page: #101421;
+  --surface: #1b2130;
+  --surface-raised: #232a3c;
+  --surface-soft: #252b3d;
+  --surface-hover: #30364c;
+  --text: #e8ebf8;
+  --text-strong: #f5f3ff;
+  --muted: #b1b9d0;
+  --faint: #96a0ba;
+  --stroke: #384159;
+  --accent: #bfaeff;
+  --accent-strong: #a894f3;
+  --accent-border: #7869b6;
+  --purple: #a996f5;
+  --purple-dark: #957de5;
+  --shadow: 0 12px 32px rgba(3, 7, 22, .25);
+  --rose-column: #2d2336;
+  --blue-column: #222c41;
+  --amber-column: #332d2c;
+  --green-column: #22372f;
+  --hero-gradient: linear-gradient(105deg, #292d4e 0%, #372b52 57%, #3b2b44 100%);
+}
+
+/* El tema claro conserva los colores de la versión original del proyecto. */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --page: #f8f9fe;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-soft: #f8f6fc;
+  --surface-hover: #f3efff;
+  --text: #2d3450;
+  --text-strong: #333953;
+  --muted: #8990a6;
+  --faint: #a0a7b8;
+  --stroke: #e9eaf4;
+  --accent: #8370d7;
+  --accent-strong: #6f5ec1;
+  --accent-border: #c1acec;
+  --purple: #8370d7;
+  --purple-dark: #6f5ec1;
+  --shadow: 0 10px 32px rgba(52, 52, 96, .035);
+  --rose-column: #fcf7fb;
+  --blue-column: #f5f8ff;
+  --amber-column: #fffbf3;
+  --green-column: #f4faf7;
+  --hero-gradient: linear-gradient(105deg, #e9e0ff 0%, #f3e5fd 58%, #fbeaf5 100%);
+}
+
+/* El fondo general y el color de texto respetan siempre el tema. */
+html, body, #root { min-height: 100%; }
+html { background: var(--page); color: var(--text); }
+body { background: var(--page); color: var(--text); }
+::selection { background: var(--accent-border); color: var(--text-strong); }
+:focus-visible { outline-color: var(--accent) !important; }
+
+/* Selectores oscuros: funcionan incluso en la primera carga, antes de React. */
+:root:not([data-theme='light']) :is(.dashboard-shell, .dashboard-main) {
+  background: var(--page);
+  color: var(--text);
+}
+:root:not([data-theme='light']) :is(.sidebar, .panel-box, .stat-card, .task-card,
+ .modal-window, .search-field, .filter-field, .toast-message, .hero-date,
+ .column-count, .project-icon-choices button, .theme-toggle) {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--stroke);
+}
+:root:not([data-theme='light']) :is(.sidebar, .stat-card, .panel-box, .task-card,
+ .modal-window) { box-shadow: var(--shadow); }
+
+/* Botones, bordes interactivos y tipografía general. */
+:root:not([data-theme='light']) :is(.btn-outline, .btn-ghost, .btn-icon) {
+  background: var(--surface);
+  color: var(--muted);
+  border-color: var(--stroke);
+}
+:root:not([data-theme='light']) :is(.btn-outline:hover, .btn-ghost:hover, .btn-icon:hover) {
+  background: var(--surface-hover);
+  color: var(--accent);
+}
+:root:not([data-theme='light']) .btn-primary {
+  background: #8774d5;
+  color: #ffffff;
+  box-shadow: 0 8px 23px rgba(86, 68, 158, .35);
+}
+:root:not([data-theme='light']) .btn-primary:hover { background: #9884e8; }
+:root:not([data-theme='light']) :is(.breadcrumbs, .breadcrumbs-slash, .sidebar-heading,
+ .sidebar-link, .sidebar-project, .workspace-copy small, .sidebar-footer small,
+ .brand-text small, .sidebar-mini-add, .sidebar-count, .sidebar-add-project,
+ .hero-heading p, .board-toolbar p, .board-hint, .dashboard-footer,
+ .panel-subtitle, .member-item small, .upcoming-item small, .team-modal-member small,
+ .task-due, .column-empty, .column-add, .column-count, .task-description,
+ .task-checklist-top, .modal-head p, .form-field input::placeholder,
+ .form-field textarea::placeholder, .subtasks-title span, .subtask-done,
+ .toast-message, .topbar-team-plus, .empty-state) {
+  color: var(--muted);
+}
+:root:not([data-theme='light']) :is(.hero-heading h1, .hero-main h2,
+ .board-toolbar h2, .stat-card, .task-card h4, .kanban-column-header h3,
+ .breadcrumbs strong, .sidebar-footer b, .member-item b, .panel-title h3,
+ .team-modal-member strong, .modal-head h2, .form-field, .subtask-row label) {
+  color: var(--text-strong);
+}
+
+/* Menú lateral: proyectos y accesos siempre legibles. */
+:root:not([data-theme='light']) :is(.sidebar-workspace, .sidebar-quote,
+ .sidebar-add-project, .sidebar-link:hover, .sidebar-link--selected,
+ .sidebar-project:hover, .sidebar-project--active) {
+  background: var(--surface-soft);
+  border-color: var(--stroke);
+}
+:root:not([data-theme='light']) :is(.sidebar-link:hover, .sidebar-link--selected,
+ .sidebar-project:hover, .sidebar-project--active, .sidebar-quote,
+ .sidebar-add-project, .sidebar-heading-row button) { color: var(--accent); }
+:root:not([data-theme='light']) :is(.workspace-icon, .brand-flower,
+ .sidebar-footer-avatar, .tint-lilac, .tint-peach, .tint-mint,
+ .tint-blue, .tint-pink) { background: var(--surface-hover); }
+:root:not([data-theme='light']) .sidebar-project { color: var(--muted); }
+:root:not([data-theme='light']) .sidebar-project--active { color: var(--accent); }
+
+/* Búsqueda, selectores y botón global de cambio de tema. */
+:root:not([data-theme='light']) :is(.search-field input, .filter-field select) {
+  color: var(--text);
+  background: transparent;
+}
+:root:not([data-theme='light']) :is(.search-field input::placeholder,
+ .search-field kbd) { color: var(--faint); }
+:root:not([data-theme='light']) .topbar-team-plus {
+  background: var(--surface-hover);
+  border-color: var(--page);
+  color: var(--accent);
+}
+:root:not([data-theme='light']) .theme-toggle:hover { background: var(--surface-hover); }
+
+/* Cabecera del proyecto, progreso circular y tarjetas de estadísticas. */
+:root:not([data-theme='light']) .hero-card {
+  background: var(--hero-gradient);
+  border-color: #55476c;
+}
+:root:not([data-theme='light']) .hero-main p { color: #cec5e5; }
+:root:not([data-theme='light']) :is(.hero-pill, .hero-go, .eyebrow,
+ .board-eyebrow, .hero-progress > span, .hero-progress-ring span,
+ .hero-progress-ring strong) { color: #d5befe; }
+:root:not([data-theme='light']) .hero-progress-ring {
+  background: radial-gradient(circle at center, #302a48 0 55%, transparent 56%),
+              conic-gradient(#b9a4ff var(--percent), #514663 0);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, .16);
+}
+:root:not([data-theme='light']) .stat-decoration { color: #35314c; }
+:root:not([data-theme='light']) .stat-card > div span { color: var(--muted); }
+:root:not([data-theme='light']) .stat-icon--all { background: #372c51; color: #c0a7ff; }
+:root:not([data-theme='light']) .stat-icon--doing { background: #283c58; color: #abd0ff; }
+:root:not([data-theme='light']) .stat-icon--done { background: #24483d; color: #9deac7; }
+:root:not([data-theme='light']) .stat-icon--pending { background: #46372d; color: #f3c88a; }
+
+/* Las cuatro columnas mantienen sus colores pastel, adaptados a baja luminosidad. */
+:root:not([data-theme='light']) .kanban-column { background: var(--surface-soft); }
+:root:not([data-theme='light']) .kanban-column--rose { background: var(--rose-column); }
+:root:not([data-theme='light']) .kanban-column--blue { background: var(--blue-column); }
+:root:not([data-theme='light']) .kanban-column--amber { background: var(--amber-column); }
+:root:not([data-theme='light']) .kanban-column--green { background: var(--green-column); }
+:root:not([data-theme='light']) .kanban-column--dragover {
+  background: #3a3154;
+  border-color: var(--accent);
+}
+:root:not([data-theme='light']) .board-scroller { scrollbar-color: #5c527c transparent; }
+:root:not([data-theme='light']) .column-add { border-color: #655674; }
+:root:not([data-theme='light']) .column-add:hover {
+  background: #3d3451;
+  border-color: var(--accent);
+  color: #e0d0ff;
+}
+:root:not([data-theme='light']) .column-dot { background: #e8a6c3; }
+:root:not([data-theme='light']) .kanban-column--blue .column-dot { background: #9abff8; }
+:root:not([data-theme='light']) .kanban-column--amber .column-dot { background: #f0d28e; }
+:root:not([data-theme='light']) .kanban-column--green .column-dot { background: #93dcb9; }
+
+/* Tarjetas: bordes, etiquetas, checklist, avatares y prioridades. */
+:root:not([data-theme='light']) .task-card:hover {
+  border-color: #8470b5;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .25);
+}
+:root:not([data-theme='light']) .task-card-top { color: var(--faint); }
+:root:not([data-theme='light']) .task-label { background: #393052; color: #d2baff; }
+:root:not([data-theme='light']) .task-meter { background: #3a4056; }
+:root:not([data-theme='light']) .task-meter > span { background: #ae9aee; }
+:root:not([data-theme='light']) .task-card-footer { border-color: var(--stroke); }
+:root:not([data-theme='light']) .priority-high { color: #ffa7b4; background: #51313f; }
+:root:not([data-theme='light']) .priority-medium { color: #ffd69b; background: #4a3c31; }
+:root:not([data-theme='light']) .priority-low { color: #a2e9cb; background: #25463c; }
+:root:not([data-theme='light']) .avatar { border-color: var(--surface); }
+:root:not([data-theme='light']) .avatar--lilac { background: #483a68; color: #e1caff; }
+:root:not([data-theme='light']) .avatar--peach { background: #65463e; color: #ffdac0; }
+:root:not([data-theme='light']) .avatar--mint { background: #2d594c; color: #b9f4d7; }
+:root:not([data-theme='light']) .avatar--blue { background: #334d71; color: #d1e5ff; }
+:root:not([data-theme='light']) .avatar--pink { background: #653e59; color: #ffceec; }
+
+/* Panel derecho: miembros, próximos vencimientos y mensaje decorativo. */
+:root:not([data-theme='light']) .panel-title h3 svg { color: var(--accent); }
+:root:not([data-theme='light']) .panel-add {
+  background: var(--surface-soft);
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+:root:not([data-theme='light']) .panel-add:hover { background: var(--surface-hover); }
+:root:not([data-theme='light']) .upcoming-item { border-color: var(--stroke); }
+:root:not([data-theme='light']) .panel-motivation {
+  background: linear-gradient(130deg, #342943, #442b40);
+  border-color: #584361;
+}
+:root:not([data-theme='light']) .panel-motivation strong { color: #e1c4ff; }
+:root:not([data-theme='light']) .panel-motivation > span:not(.panel-spark) { color: #d4bcdc; }
+:root:not([data-theme='light']) .panel-spark { color: #70577b88; }
+
+/* Modales completos: también entradas, fechas, selects, subtareas y diálogos. */
+:root:not([data-theme='light']) .modal-overlay { background: rgba(3, 5, 14, .74); }
+:root:not([data-theme='light']) :is(.modal-head, .modal-buttons,
+ .subtasks-editor, .team-modal-member, .form-field input,
+ .form-field textarea, .form-field select) { border-color: var(--stroke); }
+:root:not([data-theme='light']) :is(.form-field input, .form-field textarea,
+ .form-field select, .subtask-add, .project-icon-choices button,
+ .team-modal-member) {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+:root:not([data-theme='light']) .form-field input:focus,
+:root:not([data-theme='light']) .form-field textarea:focus,
+:root:not([data-theme='light']) .form-field select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(181, 155, 250, .18);
+}
+:root:not([data-theme='light']) .form-field input::placeholder,
+:root:not([data-theme='light']) .form-field textarea::placeholder { color: var(--faint); }
+:root:not([data-theme='light']) .subtasks-editor { background: var(--surface); }
+:root:not([data-theme='light']) .subtasks-title { color: var(--accent); }
+:root:not([data-theme='light']) .subtask-add input { color: var(--text); }
+:root:not([data-theme='light']) .subtask-add button { color: #decaff; background: #544474; }
+:root:not([data-theme='light']) .project-icon-choices button.selected {
+  background: #3c3357;
+  border-color: var(--accent);
+}
+:root:not([data-theme='light']) .project-color-swatch { border-color: var(--surface); }
+:root:not([data-theme='light']) .project-member-choices label { color: var(--text); }
+:root:not([data-theme='light']) .team-modal-member > span:last-child { color: var(--accent); }
+:root:not([data-theme='light']) .btn-delete { background: #4c2b40; color: #ffb5ca; }
+
+/* Aviso inferior: el mensaje de confeti también adopta el tema. */
+:root:not([data-theme='light']) .toast-message {
+  color: #eadbff;
+  border-color: #63527b;
+  background: #302a43;
+}
+:root:not([data-theme='light']) .toast-message svg { color: #ccb6ff; }
+
+/* Las transiciones de color son suaves, sin perjudicar la accesibilidad. */
+:root :is(.sidebar, .panel-box, .task-card, .kanban-column, .modal-window,
+ .stat-card, .search-field, .filter-field, .hero-card, .theme-toggle) {
+  transition: background-color .22s ease, color .22s ease, border-color .22s ease;
+}
+/* Conservamos la elevación animada de las tarjetas al pasar el mouse. */
+:root .task-card {
+  transition: background-color .22s ease, color .22s ease, border-color .22s ease,
+              transform .2s ease, box-shadow .2s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root :is(.sidebar, .panel-box, .task-card, .kanban-column, .modal-window,
+  .stat-card, .search-field, .filter-field, .hero-card, .theme-toggle) {
+    transition: none;
+  }
+}

@@ -1,0 +1,14 @@
+/* Zona de subtareas dentro del formulario de edición. */
+.subtasks-editor { display: grid; gap: 10px; border: 1px solid #efedf5; border-radius: 12px; padding: 14px; }
+.subtasks-title { display: flex; align-items: center; gap: 7px; color: #7c68ae; font-size: 12px; }
+.subtasks-title span { margin-left: auto; font-size: 10px; color: #a7a3b9; }
+.subtask-row { display: flex; justify-content: space-between; align-items: center; min-height: 31px; }
+.subtask-row label { display: flex; gap: 9px; align-items: center; font-size: 11px; color: #696b82; }
+.subtask-row input { accent-color: #9478da; }
+.subtask-done { text-decoration: line-through; color: #b9b5c4; }
+.subtask-row .btn-icon { width: 23px; height: 23px; }
+.subtask-add { display: flex; gap: 4px; background: #faf9fd; border-radius: 9px; padding: 4px 5px; }
+.subtask-add input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; padding: 7px; color: #52516e; font-size: 11px; }
+.subtask-add button { border: 0; border-radius: 7px; width: 30px; background: #e8dff9; color: #8c70c1; display: grid; place-items: center; }
+.btn-delete { color: #d37f91; background: #fff1f4; margin-right: auto; }
+@media (max-width: 560px) { .modal-buttons { flex-wrap: wrap; } .btn-delete { width: 100%; margin-right: 0; } }

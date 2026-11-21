@@ -1,0 +1,18 @@
+/* Tablero horizontal: cada columna tiene un tono propio y recibe tarjetas arrastradas. */
+.board-scroller { width: 100%; overflow-x: auto; padding: 2px 2px 20px; scrollbar-width: thin; scrollbar-color: #ded6f4 transparent; }
+.kanban-columns { display: grid; grid-template-columns: repeat(4, minmax(210px, 1fr)); gap: 13px; min-width: 866px; }
+.kanban-column { min-width: 0; min-height: 335px; padding: 10px; background: #f8f6fc; border-radius: 17px; border: 1px solid transparent; transition: border-color .15s, background .15s; }
+.kanban-column--rose { background: #fcf7fb; } .kanban-column--blue { background: #f5f8ff; } .kanban-column--amber { background: #fffbf3; } .kanban-column--green { background: #f4faf7; }
+.kanban-column--dragover { border: 2px dashed #aa90e0; background: #f0eafa; }
+.kanban-column-header { display: flex; align-items: center; justify-content: space-between; min-height: 37px; padding: 4px 5px 13px; }
+.kanban-column-header > div { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.column-dot { width: 9px; height: 9px; background: #e5a1bd; border-radius: 50%; flex-shrink: 0; }
+.kanban-column--blue .column-dot { background: #91b9ed; } .kanban-column--amber .column-dot { background: #eecb85; } .kanban-column--green .column-dot { background: #8ed1ae; }
+.kanban-column-header h3 { font: 900 12px 'Nunito', sans-serif; margin: 0; white-space: nowrap; }
+.column-count { padding: 3px 6px; font-size: 9px; color: #a9a6ba; background: #ffffffbd; border-radius: 7px; font-weight: 800; }
+.column-emoji { font-size: 14px; }
+.kanban-task-stack { display: flex; flex-direction: column; gap: 9px; }
+.column-add { display: flex; align-items: center; justify-content: center; gap: 5px; background: transparent; border: 1px dashed #e4deed; border-radius: 11px; min-height: 39px; color: #a1a0b5; font-size: 10px; font-weight: 800; }
+.column-add:hover { color: #9479ce; border-color: #cdb6ef; background: #ffffffa8; }
+.column-empty { min-height: 111px; display: grid; place-content: center; justify-items: center; gap: 10px; color: #c2bbd0; }
+.column-empty p { margin: 0; font-size: 10px; }

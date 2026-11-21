@@ -1,0 +1,17 @@
+{
+  "id": "/",
+  "name": "Kanban Colaborativo 🌸",
+  "short_name": "Kanban 🌸",
+  "description": "Organiza proyectos y tareas con tus amigos, recibe recordatorios privados y avanza a tu ritmo.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1d2034",
+  "theme_color": "#1d2034",
+  "lang": "es-CL",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

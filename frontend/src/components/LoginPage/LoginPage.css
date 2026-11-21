@@ -1,0 +1,14 @@
+/* Tema global: colores heredados de styles/context/theme.css. */
+.kanban-login-shell { min-height: 100vh; display: grid; place-items: center; padding: 28px 18px; background: var(--page, #141522); color: var(--text, #f3f0ff); position: relative; }
+.kanban-login-theme { position: absolute; top: 20px; right: 25px; }
+.kanban-login-card { max-width: 450px; width: 100%; border-radius: 28px; padding: 48px 32px 30px; background: var(--surface, #202235); border: 1px solid var(--border, #37384c); box-shadow: 0 25px 75px rgba(0,0,0,.17); display: flex; flex-direction: column; align-items: center; text-align: center; }
+.kanban-login-flower { background: linear-gradient(130deg,#e5a2d4,#ad9df8); color: #fff; height: 72px; width: 72px; border-radius: 24px; display: grid; place-items: center; margin-bottom: 22px; box-shadow: 0 12px 32px rgba(173,157,248,.19); }
+.kanban-login-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .13em; color: var(--text-muted, #b9b3cd); }
+.kanban-login-card h1 { font-size: clamp(36px,7vw,48px); margin: 8px 0 8px; letter-spacing: -.04em; }
+.kanban-login-card p { line-height: 1.65; color: var(--text-muted, #b9b3cd); max-width: 340px; margin: 0 auto 24px; }
+.kanban-login-features { display:flex; gap: 11px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+.kanban-login-features span { font-size: 12px; background: var(--surface-soft, rgba(150,150,180,.10)); padding: 8px 10px; border: 1px solid var(--border, #37384c); border-radius: 99px; display: flex; gap: 5px; align-items:center; }
+.kanban-google-button { min-height: 44px; display:grid; place-items:center; }
+.kanban-login-card .kanban-login-error { color: #ff8f9e; margin: 15px 0 0; font-size: 13px; }
+.kanban-login-info { font-size: 13px; margin-top: 14px; color: var(--text-muted, #b9b3cd); }
+.kanban-login-footer { font-size: 12px; color: var(--text-muted, #b9b3cd); margin-top: 26px; }

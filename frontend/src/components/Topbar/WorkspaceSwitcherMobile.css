@@ -1,0 +1,9 @@
+/* El menú lateral se oculta por debajo de 760px: proveer acceso desde el header. */
+.kb-mobile-spaces { display: none; }
+@media (max-width: 760px) {
+  .kb-mobile-spaces { width: 100%; display: flex; align-items: center; gap: 8px; order: 1; }
+  .kb-mobile-spaces label { font-size: 12px; white-space: nowrap; font-weight: 800; color: var(--muted, #a5a8c1); }
+  .kb-mobile-spaces select { flex: 1; min-width: 0; border: 1px solid #78708d; border-radius: 8px; padding: 9px 7px; background: var(--surface-soft, #222637); color: var(--text, #f3f2ff); font-size: 12px; }
+  .kb-mobile-spaces button { width: 37px; height: 37px; border: 0; border-radius: 9px; background: #9375dd; color: #fff; font-size: 23px; font-weight: 700; cursor: pointer; }
+  .mobile-topbar-brand { order: 0; }
+}

@@ -1,0 +1,7 @@
+.kb-space-form .kb-space-form-help {
+  color: var(--muted, #b5b0c9);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 2px 0 8px;
+}
+.kb-space-form .kb-space-form-error { color: #ed889d; font-size: 13px; }

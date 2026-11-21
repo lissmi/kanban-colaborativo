@@ -1,0 +1,40 @@
+/* Controles PWA integrados en el sidebar. Ningún botón es flotante. */
+.kb-pwa-controls { width: 100%; font-family: inherit; }
+.kb-pwa-buttons { display: grid; gap: 5px; }
+.kb-pwa-buttons button, .kb-pwa-panel button, .kb-pwa-panel select { font: inherit; }
+/* Mismo aspecto que las opciones del menú lateral. */
+.kb-pwa-buttons button { display: inline-flex; align-items: center; justify-content: flex-start; gap: 12px; width: 100%; height: 41px; padding: 0 12px; border-radius: 11px; font-size: 12px; font-weight: 700; box-shadow: none; cursor: pointer; text-align: left; }
+.kb-pwa-buttons button:hover { background: rgba(157, 130, 234, .12); color: #ad95ef; }
+
+.kb-pwa-install { background: transparent; color: #bdb4dc; border: 0; }
+.kb-pwa-bell { background: transparent; color: #bdb4dc; border: 0; }
+/* El panel de ajustes es modal, para no quedar recortado por el overflow del sidebar. */
+.kb-pwa-backdrop { position: fixed; inset: 0; z-index: 1600; display: grid; place-items: center; padding: 16px; box-sizing: border-box; background: rgba(12, 13, 25, .58); }
+.kb-pwa-panel { position: relative; background: #22243c; color: #f7f4ff; width: min(410px, 100%); max-height: min(80vh, 620px); box-sizing: border-box; overflow-y: auto; border: 1px solid #746992; box-shadow: 0 20px 60px rgba(0,0,0,.32); padding: 21px; border-radius: 19px; display: flex; flex-direction: column; gap: 11px; }
+
+.kb-pwa-panel h3 { display: flex; align-items: center; gap: 9px; font-size: 17px; margin: 0 26px 0 0; color: inherit; }
+.kb-pwa-panel p { font-size: 13px; line-height: 1.55; margin: 0; color: #d6d0e8; }
+.kb-pwa-panel b { color: inherit; }
+.kb-pwa-panel .kb-pwa-close { position: absolute; right: 11px; top: 10px; display: grid; place-items: center; padding: 8px; color: inherit; background: transparent; border: 0; cursor: pointer; }
+.kb-pwa-primary,.kb-pwa-secondary { display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; padding: 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.kb-pwa-primary { background: #a88ef0; border: 0; color: #151229; }
+.kb-pwa-secondary { background: #383959; color: #f7f4ff; border: 1px solid #777197; }
+.kb-pwa-panel button:disabled { opacity: .5; cursor: not-allowed; }
+.kb-pwa-field { display: flex; flex-direction: column; gap: 7px; font-size: 13px; font-weight: 700; }
+.kb-pwa-field select { background: #343653; color: #fff; border: 1px solid #8a7ba7; border-radius: 9px; padding: 10px; width: 100%; }
+.kb-pwa-checkbox { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; line-height: 1.45; cursor: pointer; }
+.kb-pwa-checkbox input { accent-color: #ab8deb; width: 17px; height: 17px; flex-shrink: 0; }
+.kb-pwa-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.kb-pwa-active { display: inline-flex; align-items: center; gap: 3px; color: #a9e8c2; font-size: 11px; }
+.kb-pwa-panel .kb-pwa-footnote { font-size: 11px; color: #c4bbdd; }
+.kb-pwa-panel .kb-pwa-message { background: #3a3454; color: #f3eaff; border-radius: 8px; padding: 9px; font-weight: 650; }
+[data-theme='light'] .kb-pwa-panel { background: #fff; color: #32284c; border-color: #ded4ed; box-shadow: 0 18px 50px rgba(57,45,83,.18); }
+[data-theme='light'] .kb-pwa-panel p { color: #645679; }
+[data-theme='light'] .kb-pwa-buttons button { background: transparent; color: #786a96; }
+[data-theme='light'] .kb-pwa-buttons button:hover { background: #f1edfc; color: #7862c4; }
+[data-theme='light'] .kb-pwa-field select { background: #f7f4fe; color: #30234f; border-color: #c9baec; }
+[data-theme='light'] .kb-pwa-secondary { background: #f0eafd; color: #4a3678; border-color: #b9a7e7; }
+[data-theme='light'] .kb-pwa-panel .kb-pwa-footnote { color: #7a6d89; }
+[data-theme='light'] .kb-pwa-panel .kb-pwa-message { background: #f0eafd; color: #554083; }
+[data-theme='light'] .kb-pwa-active { color: #247a55; }
+@media (max-width: 600px) { .kb-pwa-panel { padding: 18px; max-height: 86dvh; } }

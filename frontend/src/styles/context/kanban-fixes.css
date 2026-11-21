@@ -1,0 +1,72 @@
+/* Corrección visual — colores de proyectos y navegación (ambos temas). */
+/* El selector oscuro original unificaba todas las clases .tint-* en un fondo gris. */
+:root {
+  --swatch-lilac: #d2c0fa;
+  --swatch-peach: #ffd9bf;
+  --swatch-mint: #b6ecd3;
+  --swatch-blue: #badcfa;
+  --swatch-pink: #fac4dc;
+}
+:root:not([data-theme='light']) {
+  /* Tonos un poco más intensos en oscuridad, sin perder su identidad. */
+  --swatch-lilac: #a58be8;
+  --swatch-peach: #e8aa88;
+  --swatch-mint: #81cfae;
+  --swatch-blue: #8ab7ed;
+  --swatch-pink: #e59ec3;
+}
+/* Especificidad suficiente para superar las anulaciones del tema oscuro. */
+:root .project-color-swatch.tint-lilac { background: var(--swatch-lilac); }
+:root .project-color-swatch.tint-peach { background: var(--swatch-peach); }
+:root .project-color-swatch.tint-mint { background: var(--swatch-mint); }
+:root .project-color-swatch.tint-blue { background: var(--swatch-blue); }
+:root .project-color-swatch.tint-pink { background: var(--swatch-pink); }
+:root:not([data-theme='light']) .project-color-swatch.tint-lilac { background: var(--swatch-lilac); }
+:root:not([data-theme='light']) .project-color-swatch.tint-peach { background: var(--swatch-peach); }
+:root:not([data-theme='light']) .project-color-swatch.tint-mint { background: var(--swatch-mint); }
+:root:not([data-theme='light']) .project-color-swatch.tint-blue { background: var(--swatch-blue); }
+:root:not([data-theme='light']) .project-color-swatch.tint-pink { background: var(--swatch-pink); }
+/* También diferenciamos los íconos de proyectos en el menú lateral. */
+:root:not([data-theme='light']) .sidebar-project-icon.tint-lilac { background: #3e315f; }
+:root:not([data-theme='light']) .sidebar-project-icon.tint-peach { background: #543b36; }
+:root:not([data-theme='light']) .sidebar-project-icon.tint-mint { background: #294b40; }
+:root:not([data-theme='light']) .sidebar-project-icon.tint-blue { background: #2b415e; }
+:root:not([data-theme='light']) .sidebar-project-icon.tint-pink { background: #523348; }
+:root .project-color-swatch {
+  cursor: pointer;
+  min-width: 35px;
+  min-height: 35px;
+  border: 3px solid var(--surface, white);
+  box-shadow: 0 0 0 1px var(--stroke, #aaa);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+:root .project-color-swatch:hover { transform: scale(1.12); }
+:root .project-color-swatch.selected {
+  box-shadow: 0 0 0 2px var(--accent, #9d86df), 0 0 0 5px var(--surface, white);
+  transform: scale(1.08);
+}
+:root .project-color-swatch:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+
+/* Vistas útiles, incluso cuando todavía no existe ningún proyecto. */
+.workspace-team-page { padding: 30px 0; }
+.workspace-team-page h1 { color: var(--text-strong); margin: 12px 0 8px; font-size: 25px; }
+.workspace-team-page > p { color: var(--muted); margin-bottom: 24px; }
+.workspace-team-list { display: grid; gap: 11px; margin-bottom: 22px; max-width: 740px; }
+.workspace-team-card {
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  color: var(--text);
+  max-width: 740px;
+  margin-bottom: 20px;
+}
+.workspace-team-card > div { flex: 1; min-width: 0; }
+.workspace-team-card strong { display: block; color: var(--text-strong); }
+.workspace-team-card small, .workspace-team-card > span:not(.avatar) { display: block; color: var(--muted); font-size: 12px; }
+.workspace-member-status { margin-left: auto; }
+.sidebar-link { cursor: pointer; }
+@media (max-width: 620px) { .workspace-team-card { flex-wrap: wrap; } .workspace-member-status { margin-left: 0; } }

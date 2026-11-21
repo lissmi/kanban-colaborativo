@@ -1,0 +1,28 @@
+/* Variables de tema compartidas por todos los componentes. */
+:root {
+  --purple: #8370d7;
+  --purple-dark: #6f5ec1;
+  --text: #2d3450;
+  --muted: #8990a6;
+  --stroke: #e9eaf4;
+  --surface: #fff;
+  --page: #f8f9fe;
+  --radius: 18px;
+  --shadow: 0 10px 32px rgba(52, 52, 96, .035);
+}
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 12px; min-height: 42px; padding: 0 17px; font-size: 13px; font-weight: 800; transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--purple); color: white; box-shadow: 0 8px 20px rgba(131, 112, 215, .23); }
+.btn-primary:hover { background: var(--purple-dark); }
+.btn-outline { background: #fff; border: 1px solid var(--stroke); color: #555d78; }
+.btn-ghost { background: transparent; color: #777e96; }
+.btn-icon { display: inline-grid; place-items: center; border: 0; background: transparent; border-radius: 10px; width: 35px; height: 35px; color: #9298ac; }
+.btn-icon:hover { color: var(--purple); background: #f3efff; }
+.avatar { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; border: 2px solid #fff; font-size: 11px; font-weight: 900; color: #6e5883; }
+.avatar--lilac { background: #e9dfff; color: #7455b0; }
+.avatar--peach { background: #ffe5d5; color: #b4775d; }
+.avatar--mint { background: #d9f4e9; color: #498a71; }
+.avatar--blue { background: #dceaff; color: #5682ae; }
+.avatar--pink { background: #ffe0ee; color: #b86b91; }
+.avatar--small { width: 27px; height: 27px; font-size: 9px; }
+.empty-state { padding: 33px 12px; color: #9a9fb1; text-align: center; font-size: 13px; }

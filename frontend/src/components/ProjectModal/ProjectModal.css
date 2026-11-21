@@ -1,0 +1,8 @@
+.project-icon-choices, .project-color-choices { display: flex; gap: 7px; flex-wrap: wrap; }
+.project-icon-choices button { display: grid; place-items: center; height: 39px; width: 39px; border-radius: 11px; border: 1px solid #eeecf4; background: #faf9fd; font-size: 19px; }
+.project-icon-choices button.selected { border-color: #9d86df; background: #f0eafe; }
+.project-color-swatch { display: inline-grid; width: 34px; height: 34px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 1px #e8e4ef; }
+.project-color-swatch.selected { box-shadow: 0 0 0 2px #947bd6; }
+.project-member-choices { display: flex; gap: 10px; flex-wrap: wrap; }
+.project-member-choices label { font-weight: 600; color: #73758b; display: flex; align-items: center; gap: 5px; }
+.project-member-choices input { accent-color: #9278d6; }

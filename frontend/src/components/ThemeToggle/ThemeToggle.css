@@ -1,0 +1,21 @@
+/* El cambio de tema permanece visible en el encabezado, sin ocupar demasiado espacio. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 41px;
+  padding: 0 12px;
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  color: var(--text);
+  background: var(--surface);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+.theme-toggle:hover { background: var(--surface-hover); border-color: var(--accent-border); }
+.theme-toggle svg { color: var(--accent); }
+.theme-toggle:focus-visible { outline: 3px solid var(--accent-border); outline-offset: 2px; }
+@media (max-width: 1160px) { .theme-toggle span { display: none; } .theme-toggle { width: 41px; padding: 0; flex-shrink: 0; } }

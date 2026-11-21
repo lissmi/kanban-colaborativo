@@ -1,0 +1,21 @@
+/* Página: separa la navegación izquierda del área central de contenido. */
+.dashboard-shell { display: flex; min-height: 100vh; }
+.dashboard-main { min-width: 0; flex: 1; }
+.dashboard-content { padding: 0 33px 25px; max-width: 1770px; margin: 0 auto; }
+.dashboard-lower { display: grid; grid-template-columns: minmax(0, 1fr) 226px; align-items: start; gap: 19px; padding-top: 30px; }
+.dashboard-board { min-width: 0; scroll-margin-top: 20px; }
+.board-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 14px; margin-bottom: 17px; }
+.board-eyebrow { display: inline-flex; gap: 6px; align-items: center; color: #b1a2d2; font-size: 9px; font-weight: 900; letter-spacing: 1.5px; }
+.board-toolbar h2 { font: 900 21px 'Nunito', sans-serif; margin: 6px 0 4px; letter-spacing: -.2px; }
+.board-bloom { color: #dfb0c5; }
+.board-toolbar p { color: #a6a7ba; font-size: 11px; margin: 0; }
+.board-controls { display: flex; gap: 8px; align-items: center; }
+.filter-field { display: flex; align-items: center; gap: 5px; color: #a6a5b5; background: white; border: 1px solid #eceaf5; padding: 0 8px; height: 39px; border-radius: 10px; }
+.filter-field select { background: transparent; border: 0; outline: 0; font-size: 10px; color: #77788d; max-width: 130px; }
+.board-create { min-height: 39px; padding: 0 12px; white-space: nowrap; font-size: 10px; }
+.board-hint { margin: 6px 3px; font-size: 10px; color: #adaabd; }
+.dashboard-footer { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 27px 2px 5px; font-size: 10px; color: #b0acbd; }
+.dashboard-footer span { color: #bdafcd; }
+@media (max-width: 1280px) { .dashboard-content { padding-inline: 24px; } .dashboard-lower { grid-template-columns: minmax(0,1fr) 195px; gap: 13px; } }
+@media (max-width: 1070px) { .dashboard-lower { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .dashboard-content { padding-inline: 17px; } .dashboard-lower { padding-top: 24px; } .board-toolbar { align-items: start; flex-direction: column; } .board-controls { width: 100%; justify-content: space-between; } }

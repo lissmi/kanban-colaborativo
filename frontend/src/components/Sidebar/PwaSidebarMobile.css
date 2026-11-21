@@ -1,0 +1,16 @@
+/* La sección de Aplicación forma parte del sidebar normal, no se superpone al tablero. */
+.kb-sidebar-app-section { display: grid; gap: 9px; margin: 6px 0 17px; }
+.kb-sidebar-app-section > .sidebar-heading { margin-bottom: 4px; }
+.kb-sidebar-close, .kb-sidebar-open-button, .kb-sidebar-backdrop { display: none; }
+@media (max-width: 760px) {
+  /* El sidebar original se ocultaba por completo: ahora se despliega desde el menú móvil. */
+  .sidebar.kb-sidebar-open {
+    position: fixed; top: 0; left: 0; bottom: 0; z-index: 1200;
+    display: flex; width: min(300px, 88vw); height: 100dvh; min-height: 0;
+    box-sizing: border-box; overflow-y: auto; padding-top: 62px;
+    box-shadow: 16px 0 44px rgba(0, 0, 0, .32);
+  }
+  .kb-sidebar-backdrop { display: block; position: fixed; inset: 0; z-index: 1190; width: 100%; height: 100%; background: rgba(12, 13, 27, .62); border: 0; cursor: pointer; }
+  .kb-sidebar-close { display: inline-grid; place-items: center; position: absolute; top: 14px; right: 16px; width: 38px; height: 38px; border: 1px solid rgba(149, 130, 205, .38); border-radius: 11px; color: inherit; background: transparent; cursor: pointer; }
+  .kb-sidebar-open-button { display: inline-grid; place-items: center; width: 36px; height: 36px; padding: 0; margin: 0 6px 0 0; border: 1px solid rgba(149, 130, 205, .4); border-radius: 10px; background: rgba(147, 117, 221, .10); color: #a98fea; cursor: pointer; }
+}
