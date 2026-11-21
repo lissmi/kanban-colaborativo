@@ -14,6 +14,9 @@ import './styles/context/mobile-responsive.css';
 // El modo claro amarillo sólido se carga al final para evitar los fondos blancos originales.
 import './styles/context/light-comfort.css';
 
+// Barras de desplazamiento con tonos lavanda, azul y trigo en el modo claro.
+import './styles/context/scrollbars.css';
+
 // Monta el componente principal de React dentro del elemento #root de public/index.html.
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<React.StrictMode><App /></React.StrictMode>);
