@@ -8,6 +8,16 @@ self.addEventListener('activate', event => {
   event.waitUntil(self.clients.claim());
 });
 
+// Chrome usa la presencia de un manejador fetch para considerar el diálogo PWA.
+// Todas las respuestas siguen llegando de la red; NO se guardan en caché.
+// Se excluye /api para evitar interceptar sesiones, tareas y datos privados.
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin || url.pathname.startsWith('/api/')) return;
+  event.respondWith(fetch(event.request));
+});
+
 self.addEventListener('push', event => {
   let data = {};
   try { data = event.data ? event.data.json() : {}; } catch (_error) { data = {}; }

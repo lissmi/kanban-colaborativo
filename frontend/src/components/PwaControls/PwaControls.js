@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Bell, BellOff, Check, Download, Smartphone, X, Send, Settings2 } from 'lucide-react';
 import { api } from '../../services/api';
 import { getBrowserSubscription, isInstalled, pushSupported, subscribePush, unsubscribePush } from '../../services/pushClient';
+import { canInstallDirectly, onInstallAvailabilityChange, openNativeInstallDialog } from '../../services/installPrompt';
 import './PwaControls.css';
 
 const DEFAULTS = { reminderFrequency: '12h', statusChanges: true, priorityAlerts: true, timeZone: 'America/Santiago' };
 
 export default function PwaControls() {
-  const [prompt, setPrompt] = useState(null);
+  const [installReady, setInstallReady] = useState(canInstallDirectly);
+  const [installing, setInstalling] = useState(false);
   const [installed, setInstalled] = useState(isInstalled);
   const [instructions, setInstructions] = useState(false);
   const [open, setOpen] = useState(false);
@@ -19,14 +21,18 @@ export default function PwaControls() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // En Chrome/Edge/Android, el navegador entrega un prompt instalable solo si cumple sus requisitos.
-    const capture = event => { event.preventDefault(); setPrompt(event); };
-    const done = () => { setInstalled(true); setPrompt(null); setInstructions(false); };
-    window.addEventListener('beforeinstallprompt', capture);
-    window.addEventListener('appinstalled', done);
+    // El evento se captura globalmente incluso antes del login con Google.
+    // Este componente se limita a reaccionar a su disponibilidad.
+    const updateAvailability = () => {
+      setInstallReady(canInstallDirectly());
+      setInstalled(isInstalled());
+    };
+    const unsubscribe = onInstallAvailabilityChange(updateAvailability);
+    window.addEventListener('appinstalled', updateAvailability);
+    updateAvailability();
     return () => {
-      window.removeEventListener('beforeinstallprompt', capture);
-      window.removeEventListener('appinstalled', done);
+      unsubscribe();
+      window.removeEventListener('appinstalled', updateAvailability);
     };
   }, []);
 
@@ -50,13 +56,25 @@ export default function PwaControls() {
   }, []);
 
   async function install() {
-    if (prompt) {
-      const capturedPrompt = prompt;
-      setPrompt(null);
-      await capturedPrompt.prompt();
-      const result = await capturedPrompt.userChoice;
-      if (result.outcome !== 'accepted') setInstructions(true);
-    } else setInstructions(true);
+    // No simulamos la instalación: solicitamos el diálogo NATIVO del navegador.
+    if (installing) return;
+    setInstalling(true);
+    try {
+      // openNativeInstallDialog invoca prompt() durante este mismo clic.
+      const result = await openNativeInstallDialog();
+      if (result === 'installed') setInstalled(true);
+      // 'accepted' se confirma mediante appinstalled cuando Chrome termine.
+      if (result === 'unavailable') setInstructions(true);
+    } catch (error) {
+      // Cancelar la instalación es una decisión válida del usuario.
+      if (error.name !== 'AbortError') {
+        console.warn('[PWA] Instalación no disponible:', error.message);
+        setInstructions(true);
+      }
+    } finally {
+      setInstallReady(canInstallDirectly());
+      setInstalling(false);
+    }
   }
 
   async function enable() {
@@ -134,9 +152,18 @@ export default function PwaControls() {
   return (
     <div className="kb-pwa-controls">
       <div className="kb-pwa-buttons">
-        {!installed && <button type="button" onClick={install} className="sidebar-link kb-pwa-install">
-          <Download size={16} /> Instalar app
-        </button>}
+        {!installed && installReady && (
+          <button type="button" onClick={install} disabled={installing}
+            className="sidebar-link kb-pwa-install" aria-label="Instalar Kanban en este dispositivo">
+            <Download size={16} /> {installing ? 'Abriendo instalación...' : 'Instalar app'}
+          </button>
+        )}
+        {!installed && !installReady && (
+          <button type="button" onClick={() => setInstructions(true)}
+            className="sidebar-link kb-pwa-install" aria-label="Ver opciones para instalar Kanban">
+            <Smartphone size={16} /> Cómo instalar
+          </button>
+        )}
         <button type="button" onClick={() => { setOpen(v => !v); setMessage(''); }} className="sidebar-link kb-pwa-bell"
           aria-expanded={open} aria-label="Configurar notificaciones Push">
           {active ? <Bell size={17} /> : <BellOff size={17} />} {active ? 'Avisos activos' : 'Activar avisos'}
@@ -147,9 +174,10 @@ export default function PwaControls() {
         <div className="kb-pwa-panel" role="dialog" aria-modal="true" aria-label="Cómo instalar Kanban">
         <button type="button" className="kb-pwa-close" onClick={() => setInstructions(false)} aria-label="Cerrar"><X size={18} /></button>
         <h3><Smartphone size={18} /> Instalar Kanban 🌸</h3>
-        <p><b>iPhone:</b> abre la web en Safari, pulsa <b>Compartir</b> y luego <b>Añadir a pantalla de inicio</b>. Abre la aplicación instalada antes de activar los avisos.</p>
-        <p><b>Android:</b> abre Chrome y utiliza <b>⋮ → Instalar aplicación</b> o <b>Añadir a pantalla principal</b>.</p>
-        <p><b>Computador:</b> busca «Instalar» en el menú o barra de direcciones de Chrome/Edge.</p>
+        <p>Cuando el navegador permita instalar Kanban directamente, verás el botón <b>Instalar app</b> en el menú lateral. Bastará tocarlo y confirmar en el cuadro nativo.</p>
+        <p><b>Android:</b> utiliza Chrome sobre HTTPS. Si aún no aparece la instalación directa, visita la página un momento y recárgala. Como alternativa, abre <b>⋮ → Instalar aplicación</b>.</p>
+        <p><b>iPhone/iPad:</b> Safari no permite abrir automáticamente el diálogo desde nuestro botón. Pulsa <b>Compartir → Añadir a pantalla de inicio</b> y abre la app instalada para habilitar los avisos.</p>
+        <p><b>Computador:</b> Chrome o Edge pueden mostrar la opción de instalar junto a la barra de direcciones.</p>
         </div>
       </div>}
 
