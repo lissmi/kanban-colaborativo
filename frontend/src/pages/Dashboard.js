@@ -17,12 +17,14 @@ import ProfileModal from '../components/ProfileModal/ProfileModal';
 import MemberAvatar from '../components/MemberAvatar/MemberAvatar';
 import TeamModal from '../components/TeamModal/TeamModal';
 import Toast from '../components/Toast/Toast';
+import PinnedNotes from '../components/notes/PinnedNotes';
+import ConfirmDialog from '../components/ConfirmDialog/ConfirmDialog';
 import '../styles/pages/Dashboard.css';
 
 // Pantalla principal. Aquí unimos los componentes y gestionamos los cuadros de diálogo.
 export default function Dashboard() {
-  const { selectedProject, selectedWorkspace, projectTasks, members, createProject, createWorkspace,
-    createMember, resendInvitation, removeProjectMember, refresh,
+  const { selectedProject, selectedWorkspace, projectTasks, members, createProject, updateProject, deleteProject,
+    createWorkspace, updateWorkspace, deleteWorkspace, createMember, resendInvitation, removeProjectMember, refresh,
     upsertTask, moveTask, deleteTask, loading, error } = useWorkspace();
   const { user, updateProfile } = useAuth();
   const isAdmin = selectedWorkspace?.role === 'admin';
@@ -35,6 +37,10 @@ export default function Dashboard() {
   const [newTaskStatus, setNewTaskStatus] = useState('todo');
   const [projectOpen, setProjectOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
+  const [editingWorkspace, setEditingWorkspace] = useState(null);
+  // Una única ventana de confirmación sirve para todos los elementos eliminables.
+  const [confirmation, setConfirmation] = useState(null);
   const [memberOpen, setMemberOpen] = useState(false);
   const [teamOpen, setTeamOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -101,22 +107,89 @@ export default function Dashboard() {
     } catch (failure) { notify(`No se movió: ${failure.message}`); }
   }
 
-  async function handleDeleteTask(taskId) {
-    try { await deleteTask(taskId); setTaskOpen(false); notify('Tarea eliminada'); }
-    catch (failure) { notify(`No se eliminó: ${failure.message}`); }
+  // Se pide confirmación visual antes de mandar cualquier DELETE.
+  function requestDeleteTask(task) {
+    setConfirmation({
+      title: '¿Eliminar esta tarea?',
+      description: 'La tarea y sus subtareas desaparecerán del proyecto. Esta acción no se puede deshacer.',
+      itemName: task.title,
+      onConfirm: async () => {
+        await deleteTask(task.id);
+        setTaskOpen(false);
+        notify('Tarea eliminada correctamente');
+      },
+    });
   }
 
-  // El dueño de un Kanban nuevo recibe rol admin allí, sin cambiar otros roles.
-  async function handleCreateWorkspace(name) {
-    await createWorkspace(name);
-    setWorkspaceOpen(false);
-    setActiveView('home');
-    notify('¡Tu nuevo Kanban está listo! 🌸');
+  function openNewWorkspace() {
+    setEditingWorkspace(null);
+    setWorkspaceOpen(true);
+  }
+  function openEditWorkspace() {
+    if (!isAdmin || !selectedWorkspace) return;
+    setEditingWorkspace(selectedWorkspace);
+    setWorkspaceOpen(true);
+  }
+  function closeWorkspaceModal() { setWorkspaceOpen(false); setEditingWorkspace(null); }
+
+  // El dueño de un Kanban puede editar su nombre sin perder información.
+  async function handleSaveWorkspace(name) {
+    if (editingWorkspace) {
+      await updateWorkspace(editingWorkspace.id, name);
+      notify('Nombre del Kanban actualizado ✨');
+    } else {
+      await createWorkspace(name);
+      setActiveView('home');
+      notify('¡Tu nuevo Kanban está listo! 🌸');
+    }
+    closeWorkspaceModal();
+  }
+  function requestDeleteWorkspace() {
+    const space = selectedWorkspace;
+    if (!space || !isAdmin || space.isPersonal || space.createdBy !== user?.id) return;
+    setConfirmation({
+      title: '¿Eliminar este Kanban completo?',
+      description: 'Se eliminarán TODOS sus proyectos, tareas, subtareas, notas fijadas y membresías. Los perfiles de Google y otros Kanban no se borran. No se puede deshacer.',
+      itemName: space.name,
+      requireText: space.name,
+      onConfirm: async () => {
+        await deleteWorkspace(space.id, space.name);
+        setActiveView('home');
+        notify('Kanban eliminado. Los demás espacios siguen intactos.');
+      },
+    });
   }
 
-  async function handleCreateProject(data) {
-    try { await createProject(data); setProjectOpen(false); notify('¡Proyecto creado! Ahora podemos organizarlo 💜'); }
-    catch (failure) { notify(`No se creó el proyecto: ${failure.message}`); }
+  function openNewProject() { setEditingProject(null); setProjectOpen(true); }
+  function openEditProject(project) {
+    if (!isAdmin) return;
+    setEditingProject(project);
+    setProjectOpen(true);
+  }
+  function closeProjectModal() { setProjectOpen(false); setEditingProject(null); }
+
+  async function handleSaveProject(data) {
+    if (editingProject) {
+      await updateProject(editingProject.id, data);
+      notify('Proyecto actualizado correctamente ✨');
+    } else {
+      await createProject(data);
+      notify('¡Proyecto creado! Ahora podemos organizarlo 💜');
+    }
+    closeProjectModal();
+  }
+  function requestDeleteProject(project) {
+    if (!isAdmin || !project) return;
+    setConfirmation({
+      title: '¿Eliminar este proyecto?',
+      description: 'Se borrarán sus tareas, subtareas y notitas. Las personas mantendrán sus cuentas y sus accesos a otros proyectos. Esta acción no se puede deshacer.',
+      itemName: project.name,
+      requireText: project.name,
+      onConfirm: async () => {
+        await deleteProject(project.id, project.name);
+        notify('Proyecto y datos asociados eliminados');
+      },
+    });
   }
 
   async function handleCreateMember(data) {
@@ -138,13 +211,18 @@ export default function Dashboard() {
     } catch (failure) { notify(`No se pudo reenviar: ${failure.message}`); }
   }
 
-  // Confirmamos antes de revocar el acceso a este proyecto.
-  async function handleRemoveMember(member) {
-    if (!window.confirm(`¿Quitar a ${member.name} de «${selectedProject.name}»? Sus tareas quedarán sin asignar.`)) return;
-    try {
-      await removeProjectMember(member.id);
-      notify(`${member.name} ya no tiene acceso a este proyecto.`);
-    } catch (failure) { notify(`No se pudo quitar: ${failure.message}`); }
+  // Revocar a un integrante tiene su propio aviso y no borra su cuenta Google.
+  function handleRemoveMember(member) {
+    const projectName = selectedProject?.name || 'este proyecto';
+    setConfirmation({
+      title: '¿Quitar integrante del proyecto?',
+      description: `Dejará de participar en «${projectName}». Las tareas que tenía asignadas quedarán sin responsable.`,
+      itemName: member.name,
+      onConfirm: async () => {
+        await removeProjectMember(member.id);
+        notify(`${member.name} ya no tiene acceso a este proyecto.`);
+      },
+    });
   }
 
   // Actualiza el perfil propio en MongoDB y sincroniza todas las tarjetas/avatares.
@@ -166,28 +244,29 @@ export default function Dashboard() {
   if (loading) return <div className="dashboard-shell"><main className="dashboard-main"><p style={{ padding: 36 }}>Cargando proyectos desde MongoDB... 🌸</p></main></div>;
   if (!selectedProject) return (
     <div className="dashboard-shell">
-      <Sidebar activeView={activeView} onNavigate={setActiveView} onNewProject={() => setProjectOpen(true)} onNewWorkspace={() => setWorkspaceOpen(true)} onOpenMembers={() => setActiveView('members')} onOpenProfile={() => setProfileOpen(true)} mobileOpen={mobileMenuOpen} onCloseMobile={() => setMobileMenuOpen(false)} />
+      <Sidebar activeView={activeView} onNavigate={setActiveView} onNewProject={openNewProject} onNewWorkspace={openNewWorkspace} onEditProject={openEditProject} onDeleteProject={requestDeleteProject} onEditWorkspace={openEditWorkspace} onDeleteWorkspace={requestDeleteWorkspace} onOpenMembers={() => setActiveView('members')} onOpenProfile={() => setProfileOpen(true)} mobileOpen={mobileMenuOpen} onCloseMobile={() => setMobileMenuOpen(false)} />
       <main className="dashboard-main">
-        <Topbar search={search} setSearch={setSearch} onNewTask={() => setActiveView('board')} onOpenMembers={() => setActiveView('members')} onOpenProfile={() => setProfileOpen(true)} onNewWorkspace={() => setWorkspaceOpen(true)} onOpenMobileMenu={() => setMobileMenuOpen(true)} />
+        <Topbar search={search} setSearch={setSearch} onNewTask={() => setActiveView('board')} onOpenMembers={() => setActiveView('members')} onOpenProfile={() => setProfileOpen(true)} onNewWorkspace={openNewWorkspace} onOpenMobileMenu={() => setMobileMenuOpen(true)} />
         <div className="dashboard-content" style={{ padding: 32 }}>
           <h2>{error ? 'No se pudo cargar MongoDB' : activeView === 'members' ? 'Nuestro equipo 💜' : activeView === 'board' ? 'Mi tablero 🗂️' : '¡Comencemos tu primer proyecto! 🌸'}</h2>
           <p>{error || (activeView === 'members' ? 'Aquí aparecerán los participantes cuando exista un proyecto. Primero crea el proyecto para invitar a tu colega.' : isAdmin ? 'Crea un proyecto y empieza a organizar las tareas.' : 'Pide a la persona administradora que te agregue a un proyecto.')}</p>
           {activeView === 'members' && <div className="workspace-team-card"><strong>{user?.name || 'Tu cuenta'}</strong><span>{user?.email || ''}</span><small>{isAdmin ? 'Admin del Kanban' : 'Member del Kanban'} · Google</small></div>}
-          {isAdmin && <button className="btn btn-primary" onClick={() => setProjectOpen(true)}>Crear primer proyecto</button>}
+          {isAdmin && <button className="btn btn-primary" onClick={openNewProject}>Crear primer proyecto</button>}
         </div>
       </main>
-      {workspaceOpen && <WorkspaceModal onSave={handleCreateWorkspace} onClose={() => setWorkspaceOpen(false)} />}
-      {projectOpen && <ProjectModal members={members} onSave={handleCreateProject} onClose={() => setProjectOpen(false)} />}
+      {workspaceOpen && <WorkspaceModal key={editingWorkspace?.id || 'new-workspace'} workspace={editingWorkspace} onSave={handleSaveWorkspace} onClose={closeWorkspaceModal} />}
+      {projectOpen && <ProjectModal key={editingProject?.id || 'new-project'} project={editingProject} members={members} onSave={handleSaveProject} onClose={closeProjectModal} />}
       {profileOpen && <ProfileModal user={user} onSave={handleSaveProfile} onClose={() => setProfileOpen(false)} />}
+      {confirmation && <ConfirmDialog key={confirmation.itemName || confirmation.title} {...confirmation} onClose={() => setConfirmation(null)} />}
       <Toast message={toast?.message} happy={toast?.happy} />
     </div>
   );
 
   return (
     <div className="dashboard-shell">
-      <Sidebar activeView={activeView} onNavigate={setActiveView} onNewProject={() => setProjectOpen(true)} onNewWorkspace={() => setWorkspaceOpen(true)} onOpenMembers={() => setActiveView('members')} onOpenProfile={() => setProfileOpen(true)} mobileOpen={mobileMenuOpen} onCloseMobile={() => setMobileMenuOpen(false)} />
+      <Sidebar activeView={activeView} onNavigate={setActiveView} onNewProject={openNewProject} onNewWorkspace={openNewWorkspace} onEditProject={openEditProject} onDeleteProject={requestDeleteProject} onEditWorkspace={openEditWorkspace} onDeleteWorkspace={requestDeleteWorkspace} onOpenMembers={() => setActiveView('members')} onOpenProfile={() => setProfileOpen(true)} mobileOpen={mobileMenuOpen} onCloseMobile={() => setMobileMenuOpen(false)} />
       <main className="dashboard-main">
-        <Topbar search={search} setSearch={setSearch} onNewTask={() => { setActiveView('board'); openNewTask(); }} onOpenMembers={() => setActiveView('members')} onOpenProfile={() => setProfileOpen(true)} onNewWorkspace={() => setWorkspaceOpen(true)} onOpenMobileMenu={() => setMobileMenuOpen(true)} />
+        <Topbar search={search} setSearch={setSearch} onNewTask={() => { setActiveView('board'); openNewTask(); }} onOpenMembers={() => setActiveView('members')} onOpenProfile={() => setProfileOpen(true)} onNewWorkspace={openNewWorkspace} onOpenMobileMenu={() => setMobileMenuOpen(true)} />
         <div className="dashboard-content">
           {activeView === 'members' ? (
             <section className="workspace-team-page">
@@ -211,6 +290,8 @@ export default function Dashboard() {
           ) : (
           <>
           {activeView === 'home' && <ProjectHero project={selectedProject} tasks={projectTasks} />}
+          {/* Las referencias quedan siempre visibles y no alteran el progreso Kanban. */}
+          <PinnedNotes onMessage={notify} />
           <div className="dashboard-lower">
             <section className="dashboard-board" id="tablero">
               <div className="board-toolbar">
@@ -228,12 +309,13 @@ export default function Dashboard() {
         </div>
       </main>
 
-      {taskOpen && <TaskModal key={activeTask?.id || 'new-task'} task={activeTask} initialStatus={newTaskStatus} members={members} project={selectedProject} onSave={saveTask} onDelete={handleDeleteTask} onClose={() => setTaskOpen(false)} />}
-      {workspaceOpen && <WorkspaceModal onSave={handleCreateWorkspace} onClose={() => setWorkspaceOpen(false)} />}
-      {projectOpen && <ProjectModal members={members} onSave={handleCreateProject} onClose={() => setProjectOpen(false)} />}
+      {taskOpen && <TaskModal key={activeTask?.id || 'new-task'} task={activeTask} initialStatus={newTaskStatus} members={members} project={selectedProject} onSave={saveTask} onRequestDelete={requestDeleteTask} onClose={() => setTaskOpen(false)} />}
+      {workspaceOpen && <WorkspaceModal key={editingWorkspace?.id || 'new-workspace'} workspace={editingWorkspace} onSave={handleSaveWorkspace} onClose={closeWorkspaceModal} />}
+      {projectOpen && <ProjectModal key={editingProject?.id || 'new-project'} project={editingProject} members={members} onSave={handleSaveProject} onClose={closeProjectModal} />}
       {teamOpen && <TeamModal project={selectedProject} members={members} tasks={projectTasks} onAddMember={isAdmin ? openNewMember : null} onClose={() => setTeamOpen(false)} />}
       {memberOpen && isAdmin && <MemberModal onSave={handleCreateMember} onClose={() => setMemberOpen(false)} />}
       {profileOpen && <ProfileModal user={user} onSave={handleSaveProfile} onClose={() => setProfileOpen(false)} />}
+      {confirmation && <ConfirmDialog key={confirmation.itemName || confirmation.title} {...confirmation} onClose={() => setConfirmation(null)} />}
       <Toast message={toast?.message} happy={toast?.happy} />
     </div>
   );

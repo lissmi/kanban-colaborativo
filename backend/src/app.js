@@ -11,6 +11,7 @@ const workspaceRoutes = require('./routes/workspace.routes');
 const projectRoutes = require('./routes/projects.routes');
 const memberRoutes = require('./routes/members.routes');
 const taskRoutes = require('./routes/tasks.routes');
+const notesRoutes = require('./routes/notes.routes');
 const notificationsRoutes = require('./routes/notifications.routes');
 const cronRoutes = require('./routes/cron.routes');
 const { requireAuth } = require('./middleware/auth');
@@ -60,6 +61,8 @@ app.use('/api/workspace', workspaceRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/members', memberRoutes);
 app.use('/api/tasks', taskRoutes);
+// Notas fijadas: acceso verificado por el mismo middleware de Kanban.
+app.use('/api/notes', notesRoutes);
 app.use((req, _res, next) => next(Object.assign(new Error('Ruta no encontrada'), { status: 404 })));
 app.use(errorHandler);
 module.exports = app;

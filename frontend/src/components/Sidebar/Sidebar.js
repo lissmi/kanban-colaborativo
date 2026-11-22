@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, FolderKanban, Users, Plus, Sparkles, Heart, FolderPlus, UserRound, Crown, X } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, Users, Plus, Sparkles, Heart, FolderPlus, UserRound, Crown, X, Pencil, Trash2 } from 'lucide-react';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { useAuth } from '../../context/AuthContext';
 import MemberAvatar from '../MemberAvatar/MemberAvatar';
@@ -7,9 +7,10 @@ import PwaControls from '../PwaControls/PwaControls';
 import './Sidebar.css';
 import './WorkspaceSwitcher.css';
 import './PwaSidebarMobile.css';
+import '../management/Management.css';
 
 // La lista de proyectos cambia al seleccionar un Kanban; nunca se mezclan espacios.
-export default function Sidebar({ onNewProject, onNewWorkspace, onOpenProfile, activeView = 'home', onNavigate = () => {}, mobileOpen = false, onCloseMobile = () => {} }) {
+export default function Sidebar({ onNewProject, onNewWorkspace, onEditProject, onDeleteProject, onEditWorkspace, onDeleteWorkspace, onOpenProfile, activeView = 'home', onNavigate = () => {}, mobileOpen = false, onCloseMobile = () => {} }) {
   const { projects, selectedProject, selectProject, members,
     spaces, selectedWorkspace, selectedWorkspaceId, selectWorkspace } = useWorkspace();
   const { user } = useAuth();
@@ -45,6 +46,11 @@ export default function Sidebar({ onNewProject, onNewWorkspace, onOpenProfile, a
           <span className="kb-workspace-role"><Crown size={13} /> {isAdmin ? 'Administras este Kanban' : 'Participas como miembro'}</span>
           <button type="button" className="kb-new-workspace" onClick={onNewWorkspace} title="Crear otro Kanban"><Plus size={14} /> Nuevo</button>
         </div>
+        {isAdmin && <div className="kb-workspace-admin-actions">
+          <button type="button" onClick={() => { onEditWorkspace(); onCloseMobile(); }} title="Cambiar nombre del Kanban"><Pencil size={13} /> Editar Kanban</button>
+          {!selectedWorkspace?.isPersonal && selectedWorkspace?.createdBy === user?.id &&
+            <button type="button" className="kb-danger" onClick={() => { onDeleteWorkspace(); onCloseMobile(); }} title="Eliminar este Kanban"><Trash2 size={13} /> Eliminar</button>}
+        </div>}
       </div>
       <div className="sidebar-section">
         <span className="sidebar-heading">ESPACIO DE TRABAJO</span>
@@ -59,13 +65,21 @@ export default function Sidebar({ onNewProject, onNewWorkspace, onOpenProfile, a
           {isAdmin && <button type="button" className="sidebar-mini-add" onClick={onNewProject} title="Crear proyecto"><Plus size={17} /></button>}
         </div>
         {projects.map(project => (
-          <button type="button" key={project.id}
-            className={`sidebar-project ${selectedProject?.id === project.id ? 'sidebar-project--active' : ''}`}
-            onClick={() => { selectProject(project.id); onNavigate('home'); onCloseMobile(); }}>
-            <span className={`sidebar-project-icon tint-${project.color}`}>{project.icon}</span>
-            <span className="sidebar-project-name">{project.name}</span>
-            {selectedProject?.id === project.id && <span className="project-selected-dot" />}
-          </button>
+          <div className="kb-project-manage-row" key={project.id}>
+            <button type="button"
+              className={`sidebar-project kb-project-select ${selectedProject?.id === project.id ? 'sidebar-project--active' : ''}`}
+              onClick={() => { selectProject(project.id); onNavigate('home'); onCloseMobile(); }}>
+              <span className={`sidebar-project-icon tint-${project.color}`}>{project.icon}</span>
+              <span className="sidebar-project-name">{project.name}</span>
+              {selectedProject?.id === project.id && <span className="project-selected-dot" />}
+            </button>
+            {isAdmin && <div className="kb-project-manage-buttons">
+              <button type="button" aria-label={`Editar proyecto ${project.name}`} title="Editar proyecto"
+                onClick={() => { onEditProject(project); onCloseMobile(); }}><Pencil size={14} /></button>
+              <button type="button" className="kb-danger" aria-label={`Eliminar proyecto ${project.name}`} title="Eliminar proyecto"
+                onClick={() => { onDeleteProject(project); onCloseMobile(); }}><Trash2 size={14} /></button>
+            </div>}
+          </div>
         ))}
         {isAdmin && <button type="button" className="sidebar-add-project" onClick={onNewProject}><FolderPlus size={16} /> Nuevo proyecto</button>}
       </div>

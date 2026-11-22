@@ -1,0 +1,21 @@
+/* Gestión visible únicamente para quien administra el Kanban; el backend verifica los roles. */
+.kb-project-manage-row { display: flex; gap: 3px; align-items: center; width: 100%; min-width: 0; }
+.kb-project-manage-row .kb-project-select { flex: 1 1 auto; width: auto; min-width: 0; }
+.kb-project-manage-row .kb-project-select .sidebar-project-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kb-project-manage-buttons { display: flex; flex-shrink: 0; align-items: center; gap: 2px; }
+.kb-project-manage-buttons button, .kb-workspace-admin-actions button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+  border-radius: 9px; cursor: pointer; border: 1px solid transparent;
+  color: inherit; background: transparent; font: inherit;
+}
+.kb-project-manage-buttons button { height: 30px; width: 29px; flex-shrink: 0; }
+.kb-project-manage-buttons button:hover, .kb-workspace-admin-actions button:hover { background: rgba(140, 109, 198, .2); }
+.kb-project-manage-buttons .kb-danger:hover, .kb-workspace-admin-actions .kb-danger:hover { background: rgba(190, 69, 95, .18); color: #b93d62; }
+.kb-project-manage-buttons button:focus-visible, .kb-workspace-admin-actions button:focus-visible { outline: 2px solid #8c65ca; outline-offset: 2px; }
+.kb-workspace-admin-actions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.kb-workspace-admin-actions button { font-size: 11px; font-weight: 700; border-color: currentColor; padding: 5px 8px; min-height: 30px; }
+.kb-workspace-admin-actions .kb-danger { color: #ba4a6b; }
+.kb-manage-hint { font-size: 10px; line-height: 1.35; margin-top: 8px; opacity: .8; }
+html[data-theme="light"] .kb-project-manage-buttons button { color: #3a3655; }
+html[data-theme="light"] .kb-workspace-admin-actions button { color: #38355d; }
+@media (max-width: 430px) { .kb-project-manage-buttons button { width: 33px; height: 34px; } }

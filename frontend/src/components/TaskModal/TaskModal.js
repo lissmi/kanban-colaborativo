@@ -4,7 +4,7 @@ import ModalShell from '../ModalShell/ModalShell';
 import { makeId, STATUSES, PRIORITIES } from '../../utils/board';
 import './TaskModal.css';
 
-export default function TaskModal({ task, initialStatus = 'todo', members, project, onSave, onDelete, onClose }) {
+export default function TaskModal({ task, initialStatus = 'todo', members, project, onSave, onRequestDelete, onClose }) {
   const team = members.filter(member => project.memberIds.includes(member.id));
   // Un único estado controla los campos para poder guardar una tarea completa.
   const [form, setForm] = useState(() => task ? {
@@ -50,7 +50,7 @@ export default function TaskModal({ task, initialStatus = 'todo', members, proje
           <div className="subtask-add"><input placeholder="Agregar una subtarea..." value={newSubtask} onChange={event => setNewSubtask(event.target.value)} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); addSubtask(); } }} /><button type="button" onClick={addSubtask} title="Agregar subtarea"><Plus size={17} /></button></div>
         </div>
         <div className="modal-buttons">
-          {task && <button className="btn btn-delete" type="button" onClick={() => { if (window.confirm('¿Eliminar esta tarea?')) onDelete(task.id); }}><Trash2 size={16} /> Eliminar</button>}
+          {task && <button className="btn btn-delete" type="button" onClick={() => onRequestDelete(task)}><Trash2 size={16} /> Eliminar</button>}
           <button type="button" className="btn btn-outline" onClick={onClose}>Cancelar</button>
           <button type="submit" className="btn btn-primary"><Check size={16} /> {task ? 'Guardar cambios' : 'Crear tarea'}</button>
         </div>

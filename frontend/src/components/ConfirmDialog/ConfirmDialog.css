@@ -1,0 +1,64 @@
+/* Confirmación propia de Kanban: no usa el cuadro cuadrado de window.confirm. */
+.kb-confirm-overlay {
+  position: fixed; inset: 0; z-index: 2147480000;
+  display: grid; place-items: center; padding: 18px;
+  background: rgba(9, 13, 30, .72);
+  -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
+}
+.kb-confirm-card {
+  position: relative; width: min(100%, 460px); max-height: min(90vh, 700px);
+  overflow-y: auto; padding: 30px; border-radius: 23px;
+  background: #20243a; border: 1px solid #585375;
+  color: #f5f1ff; box-shadow: 0 22px 75px rgba(0,0,0,.33);
+  text-align: left;
+}
+.kb-confirm-close {
+  position: absolute; right: 18px; top: 15px; display: grid; place-items: center;
+  width: 34px; height: 34px; border: 0; border-radius: 10px;
+  color: #cec7e7; background: transparent; cursor: pointer;
+}
+.kb-confirm-close:hover { background: rgba(150,130,190,.2); }
+.kb-confirm-icon {
+  display: grid; place-items: center; width: 54px; height: 54px; border-radius: 17px;
+  color: #f8b5b9; background: #513340; border: 1px solid #765061; margin-bottom: 16px;
+}
+.kb-confirm-card h2 { color: inherit; font-weight: 800; font-size: clamp(19px, 4vw, 23px); margin: 0 40px 10px 0; }
+.kb-confirm-card > p { color: #d5d0e2; line-height: 1.6; font-size: 14px; margin: 0 0 14px; }
+.kb-confirm-item {
+  padding: 12px 14px; margin: 10px 0 18px; border-radius: 12px;
+  overflow-wrap: anywhere; font-size: 14px; font-weight: 700;
+  color: #f2e3ff; background: #34334f; border: 1px solid #645879;
+}
+.kb-confirm-verify { display: grid; gap: 8px; font-size: 13px; line-height: 1.5; color: #ded9f0; margin-bottom: 17px; }
+.kb-confirm-verify strong { color: #fff; overflow-wrap: anywhere; }
+.kb-confirm-verify input {
+  width: 100%; min-width: 0; box-sizing: border-box; border: 1px solid #857aaf;
+  background: #2a2c46; color: #fff; border-radius: 12px; padding: 12px 13px;
+  font: inherit; outline-offset: 2px;
+}
+.kb-confirm-verify input:focus-visible { outline: 3px solid #a795ef; }
+.kb-confirm-error { color: #ffd1d1 !important; padding: 10px 12px; border-radius: 10px; background: #653541; }
+.kb-confirm-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 23px; }
+.kb-confirm-actions button {
+  border: 1px solid transparent; border-radius: 12px; cursor: pointer; min-height: 44px;
+  font: inherit; font-weight: 750; padding: 11px 18px;
+}
+.kb-confirm-cancel { color: #f3f0ff; background: #444660; border-color: #656482 !important; }
+.kb-confirm-delete { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #b44a70; color: #fff; }
+.kb-confirm-delete:hover:not(:disabled) { background: #a53661; }
+.kb-confirm-actions button:focus-visible, .kb-confirm-close:focus-visible { outline: 3px solid #c6b3fa; outline-offset: 2px; }
+.kb-confirm-actions button:disabled, .kb-confirm-close:disabled { opacity: .5; cursor: not-allowed; }
+/* Amarillo y lavanda del modo claro actual; evitamos volver a superficies blancas. */
+html[data-theme="light"] .kb-confirm-overlay { background: rgba(35, 34, 60, .54); }
+html[data-theme="light"] .kb-confirm-card { background: #e3d18e; color: #222a46; border-color: #a18b54; }
+html[data-theme="light"] .kb-confirm-close { color: #333a57; }
+html[data-theme="light"] .kb-confirm-icon { background: #e9aeac; color: #693149; border-color: #c88894; }
+html[data-theme="light"] .kb-confirm-card > p { color: #46506c; }
+html[data-theme="light"] .kb-confirm-item { color: #2d3656; background: #b9a3d4; border-color: #9779b8; }
+html[data-theme="light"] .kb-confirm-verify { color: #353d5b; }
+html[data-theme="light"] .kb-confirm-verify strong { color: #29314d; }
+html[data-theme="light"] .kb-confirm-verify input { background: #e9d79d; color: #202b45; border-color: #998555; }
+html[data-theme="light"] .kb-confirm-cancel { background: #a1b5d5; color: #263150; border-color: #7f94b2 !important; }
+html[data-theme="light"] .kb-confirm-error { color: #7b2035 !important; background: #f1b6b7; }
+@media (max-width: 480px) { .kb-confirm-card { padding: 25px 20px; border-radius: 20px; } .kb-confirm-actions button { flex: 1; } }
+@media (prefers-reduced-motion: no-preference) { .kb-confirm-card { animation: kb-confirm-show .16s ease-out both; } @keyframes kb-confirm-show { from { transform: translateY(9px) scale(.99); opacity: .4; } to { transform: none; opacity: 1; } } }

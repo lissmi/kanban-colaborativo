@@ -4,7 +4,7 @@ import { api, session } from '../services/api';
 const WorkspaceContext = createContext(null);
 
 export function WorkspaceProvider({ children }) {
-  const [workspace, setWorkspace] = useState({ projects: [], members: [], tasks: [] });
+  const [workspace, setWorkspace] = useState({ projects: [], members: [], tasks: [], notes: [] });
   const [spaces, setSpaces] = useState([]);
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState(() => session.getWorkspace());
   const [selectedProjectId, setSelectedProjectId] = useState(null);
@@ -31,7 +31,7 @@ export function WorkspaceProvider({ children }) {
       setSpaces(list);
       setSelectedWorkspaceId(activeId);
       if (!activeId) {
-        setWorkspace({ projects: [], members: [], tasks: [] });
+        setWorkspace({ projects: [], members: [], tasks: [], notes: [] });
         setSelectedProjectId(null);
         setError('No tienes Kanban disponibles');
         return;
@@ -87,12 +87,34 @@ export function WorkspaceProvider({ children }) {
     workspace.tasks.filter(task => task.projectId === selectedProject?.id),
     [workspace.tasks, selectedProject]);
 
+  // Las notas se sincronizan junto a las tareas sin generar otra sesión.
+  const projectNotes = useMemo(() =>
+    (workspace.notes || []).filter(note => note.projectId === selectedProject?.id),
+    [workspace.notes, selectedProject]);
+
   // Cambiar de espacio NO crea una segunda sesión ni modifica la cuenta Google.
   async function selectWorkspace(id) {
     if (!spaces.some(space => space.id === id)) throw new Error('No tienes acceso a este Kanban');
     setSelectedProjectId(null);
     session.setWorkspace(id);
     await refresh({ workspaceId: id });
+  }
+  // Editar nombre del Kanban sin crear nuevos espacios ni cambiar roles.
+  async function updateWorkspace(id, name) {
+    const result = await api(`/spaces/${encodeURIComponent(id)}`, {
+      method: 'PATCH', body: { name },
+    });
+    await refresh({ workspaceId: id });
+    return result.space;
+  }
+  // Eliminar un Kanban secundario; al refrescar se selecciona uno de los restantes.
+  async function deleteWorkspace(id, confirmName) {
+    await api(`/spaces/${encodeURIComponent(id)}`, {
+      method: 'DELETE', body: { confirmName },
+    });
+    setSelectedProjectId(null);
+    session.setWorkspace('');
+    await refresh();
   }
   async function createWorkspace(name) {
     const result = await api('/spaces', { method: 'POST', body: { name } });
@@ -106,6 +128,22 @@ export function WorkspaceProvider({ children }) {
     await refresh();
     setSelectedProjectId(result.id);
     return result;
+  }
+  // Editar metadatos y participantes desde el formulario existente.
+  async function updateProject(projectId, data) {
+    const result = await api(`/projects/${encodeURIComponent(projectId)}`, {
+      method: 'PATCH', body: data,
+    });
+    await refresh();
+    return result;
+  }
+  // La confirmación del nombre también es validada por Express.
+  async function deleteProject(projectId, confirmName) {
+    await api(`/projects/${encodeURIComponent(projectId)}`, {
+      method: 'DELETE', body: { confirmName },
+    });
+    setSelectedProjectId(null);
+    await refresh();
   }
   async function createMember(data) {
     if (!selectedProject) throw new Error('Selecciona un proyecto para invitar personas');
@@ -148,10 +186,25 @@ export function WorkspaceProvider({ children }) {
     await api(`/tasks/${encodeURIComponent(taskId)}`, { method: 'DELETE' });
     await refresh();
   }
+  async function createNote(data) {
+    if (!selectedProject) throw new Error('Selecciona un proyecto');
+    const result = await api('/notes', { method: 'POST', body: { ...data, projectId: selectedProject.id } });
+    await refresh({ silent: true });
+    return result;
+  }
+  async function updateNote(noteId, data) {
+    const result = await api(`/notes/${encodeURIComponent(noteId)}`, { method: 'PATCH', body: data });
+    await refresh({ silent: true });
+    return result;
+  }
+  async function deleteNote(noteId) {
+    await api(`/notes/${encodeURIComponent(noteId)}`, { method: 'DELETE' });
+    await refresh({ silent: true });
+  }
   return <WorkspaceContext.Provider value={{
-    ...workspace, spaces, selectedWorkspace, selectedWorkspaceId, selectWorkspace, createWorkspace,
-    loading, error, refresh, selectedProject, projectTasks, selectProject: setSelectedProjectId,
-    createProject, createMember, resendInvitation, removeProjectMember,
+    ...workspace, spaces, selectedWorkspace, selectedWorkspaceId, selectWorkspace, createWorkspace, updateWorkspace, deleteWorkspace,
+    loading, error, refresh, selectedProject, projectTasks, projectNotes, createNote, updateNote, deleteNote, selectProject: setSelectedProjectId,
+    createProject, updateProject, deleteProject, createMember, resendInvitation, removeProjectMember,
     upsertTask, moveTask, deleteTask,
   }}>{children}</WorkspaceContext.Provider>;
 }
