@@ -8,7 +8,7 @@
 :root[data-theme='light'] {
   color-scheme: light;
   /* Variables globales: reemplazan el blanco puro y los pasteles muy deslavados. */
-  --page: #e7d585;             /* Fondo principal: amarillo pollito apagado. */
+  --page: #e7da9e;             /* Fondo principal: amarillo pollito apagado. */
   --surface: #d1b77b;          /* Tarjetas: crema cálida sólida. */
   --surface-raised: #deca8a;   /* Tarjetas de tareas: vainilla. */
   --surface-soft: #bca972;     /* Controles y elementos secundarios. */
@@ -27,7 +27,7 @@
   /* Estados de tablero: rosa, azul, mantequilla y verde definidos. */
   --rose-column: #c588a3;
   --blue-column: #84a7d0;
-  --amber-column: #d1a75a;
+  --amber-column: #e3bb70;
   --green-column: #86b49b;
   --hero-gradient: linear-gradient(110deg, #a786c8 0%, #7ca4cb 56%, #bf8fae 100%);
   --swatch-lilac: #8760c3;
@@ -48,7 +48,7 @@
 :root[data-theme='light'] ::selection { background: #b6a6d2; color: #17213a; }
 
 /* 2. Sidebar crema: su fondo se diferencia del amarillo del contenido. */
-:root[data-theme='light'] .sidebar { background: #edde91; border-right: 1px solid #867448; }
+:root[data-theme='light'] .sidebar { background: #e7da9e; border-right: 1px solid #867448; }
 :root[data-theme='light'] :is(.sidebar-workspace, .kb-workspace-panel) {
   background: ddc37b;
   border-color: #897851;
@@ -141,16 +141,16 @@
   color: var(--text);
   box-shadow: var(--shadow);
 }
-:root[data-theme='light'] .stats-row > .stat-card:nth-child(1) { background: #ae8bc9; border-color: #81639f; }
-:root[data-theme='light'] .stats-row > .stat-card:nth-child(2) { background: #85a8ce; border-color: #627f9e; }
-:root[data-theme='light'] .stats-row > .stat-card:nth-child(3) { background: #87b69a; border-color: #64866e; }
-:root[data-theme='light'] .stats-row > .stat-card:nth-child(4) { background: #cda657; border-color: #988047; }
+:root[data-theme='light'] .stats-row > .stat-card:nth-child(1) { background: #cca9e7; border-color: #81639f; }
+:root[data-theme='light'] .stats-row > .stat-card:nth-child(2) { background: #a0c3e9; border-color: #627f9e; }
+:root[data-theme='light'] .stats-row > .stat-card:nth-child(3) { background: #a6d5b9; border-color: #64866e; }
+:root[data-theme='light'] .stats-row > .stat-card:nth-child(4) { background: #dbb375; border-color: #988047; }
 :root[data-theme='light'] .stat-card > div span { color: #32344e; }
 :root[data-theme='light'] .stat-decoration { color: #635477; }
 :root[data-theme='light'] .stat-icon--all { background: #9b79c3; color: #302062; }
 :root[data-theme='light'] .stat-icon--doing { background: #739ed0; color: #173f6d; }
 :root[data-theme='light'] .stat-icon--done { background: #6da982; color: #154d32; }
-:root[data-theme='light'] .stat-icon--pending { background: #bd9340; color: #54340d; }
+:root[data-theme='light'] .stat-icon--pending { background: #db9468; color: #54340d; }
 
 /* 5. Cuatro columnas de color definido y tareas vainilla tostada. */
 :root[data-theme='light'] .kanban-column { border: 1px solid #8f7b5a; }
@@ -185,7 +185,7 @@
 
 /* 6. Equipo, formularios, ventana de notificaciones y login. */
 :root[data-theme='light'] :is(.panel-box, .workspace-team-card) {
-  background: #d0b775;
+  background: #ebd498;
   color: var(--text);
   border-color: #907850;
   box-shadow: var(--shadow);
