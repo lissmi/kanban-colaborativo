@@ -156,7 +156,7 @@
 :root[data-theme='light'] .kanban-column { border: 1px solid #8f7b5a; }
 :root[data-theme='light'] .kanban-column--rose { background: #c588a3; border-color: #95637c; }
 :root[data-theme='light'] .kanban-column--blue { background: #84a7d0; border-color: #5b7da0; }
-:root[data-theme='light'] .kanban-column--amber { background: #e1b86b; border-color: #997a41; }
+:root[data-theme='light'] .kanban-column--amber { background: #efca83; border-color: #997a41; }
 :root[data-theme='light'] .kanban-column--green { background: #86b49b; border-color: #5d8c72; }
 :root[data-theme='light'] .kanban-column--dragover { background: #9c8ac8; border: 2px dashed var(--accent); }
 :root[data-theme='light'] .column-count { background: #dbbf80; color: #252944; }
