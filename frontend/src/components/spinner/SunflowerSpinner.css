@@ -25,7 +25,7 @@
 
 /* El tema claro usa su paleta cálida; nunca aparece un fondo blanco. */
 :root[data-theme="light"] .kb-spinner-overlay {
-  background: #d1bc61;
+  background: #e7da9e;
   color: #23314b;
 }
 
